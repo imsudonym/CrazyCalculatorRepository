@@ -4,6 +4,8 @@ public class Queue {
 	PseudoArray array = new PseudoArray(100);
 	PseudoArray temp = new PseudoArray(100);
 	
+	
+	private static int temp1 = 0;			
 	private static int q = 0;
 	private ImageIcon addIcon = new ImageIcon(getClass().getResource("/images/+.png"));
 	private ImageIcon minusIcon = new ImageIcon(getClass().getResource("/images/-.png"));
@@ -17,7 +19,7 @@ public class Queue {
 	}
 	
 	public void enqueue(String input){
-		
+		/*
 		if(input.equals("+"))
 			CrazyCalculatorMain.sShots.queueBlocks[q++].setIcon(addIcon);
 		if(input.equals("-"))
@@ -30,15 +32,20 @@ public class Queue {
 			CrazyCalculatorMain.sShots.queueBlocks[q++].setIcon(oppIcon);
 		if(input.equals(")"))
 			CrazyCalculatorMain.sShots.queueBlocks[q++].setIcon(clospIcon);
-		
+		*/
 		array.add(input);
 	}
 	
 	public String dequeue(){
-		int temp = 0;		
 		
-		CrazyCalculatorMain.sShots.queueBlocks[temp++].setIcon(null);
+		/*
+		//	show contents							
 		q--;
+		
+		for(int i = 0; i < q; i++){
+			CrazyCalculatorMain.sShots.queueBlocks[i].setIcon(CrazyCalculatorMain.sShots.queueBlocks[i].getIcon());
+		}
+		/////////////////////////*/
 		
 		return array.remove();
 	}

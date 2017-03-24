@@ -6,9 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class CrazyCalculatorMain extends JFrame{
+public class CrazyCalculatorMain extends JFrame implements Runnable{
 	
-	
+	private int sleepTime = 500;
 	public static String userInput = " ";
 	public static String[] token; 
 	public static JLabel input, output;
@@ -91,11 +91,21 @@ public class CrazyCalculatorMain extends JFrame{
 			
 				//	"del" button
 			if(source == numPad[11]){
+				
+				if(userInput.length() == 1){
+					userInput = "";
+				}				
+				
 				if(userInput.length() > 1){
-					userInput = userInput.substring(0, userInput.length()-2);
-				}else if(userInput.length() == 1){
-					userInput = userInput.substring(0, userInput.length()-1);
-				}
+					if(userInput.substring(userInput.length()-2).equals("( ") || userInput.substring(userInput.length() - 2).equals(" )")){
+						userInput = userInput.substring(0, userInput.length() - 2);						
+					}else if(userInput.toCharArray()[userInput.length()-1] == ' '){
+						userInput = userInput.substring(0,userInput.length()-3);
+					}else{
+						userInput = userInput.substring(0, userInput.length()-1);
+					
+					}
+				}								
 							
 				input.setText(userInput);
 				
@@ -118,7 +128,7 @@ public class CrazyCalculatorMain extends JFrame{
 			}
 			else if(source == opPad[7]){
 								
-				sShots.callRun();
+				start();
 				
 			}			
 			else{				
@@ -227,6 +237,232 @@ public class CrazyCalculatorMain extends JFrame{
 		
 		output.setText("" + value + " ");		
 	}
+	
+
+	public void run(){
+		
+		try{
+			
+			token = userInput.split(" ");							
+			
+			if(infixIsValid()){
+				
+				//start parsing
+				for(int i = 0; i < token.length; i++)
+				{		
+						// if token is open parenthesis
+						if(token[i].equals("(")){	
+							opStack.push(token[i]);	
+							Thread.sleep(sleepTime);
+						}
+						
+						// if token is close parenthesis
+						else if(token[i].equals(")")){
+							
+							while(!opStack.isEmpty())
+							{
+								String data = "";
+								data = opStack.pop();
+								//Thread.sleep(sleepTime);
+								
+								if(!data.equals("(")){									
+									postfix.add(data);
+									
+									Thread.sleep(sleepTime);
+								}else break;							
+							}							
+						}
+						
+						// if token is an operator
+						else if(isOperator(token[i])){																
+							
+							if(opStack.isEmpty()){
+								opStack.push(token[i]);
+								Thread.sleep(sleepTime);
+							}
+							else{
+
+								while(!opStack.isEmpty())
+								{
+									String data = "";
+									data = opStack.pop();
+									//Thread.sleep(sleepTime);
+									
+									if(data.equals("(")){										
+										opStack.push(data);
+										Thread.sleep(sleepTime);
+										break;
+									}
+									
+									if(isOperator(data)){
+										if(isLessThan(data, token[i])){
+											opStack.push(data);
+											Thread.sleep(sleepTime);
+											break;
+										}
+										
+										else if(isGreaterOrEqual(data, token[i])){
+											postfix.add(data);
+											
+											Thread.sleep(sleepTime);
+											break;
+										}
+									}									
+								}
+								
+								opStack.push(token[i]);	
+							}											
+						}	
+						
+						// if token is an operand
+						else{																		
+							postfix.add(token[i]);
+							
+							Thread.sleep(sleepTime);
+						}
+				}	// end parse
+				
+				// no more items				
+				while(!opStack.isEmpty()){	
+					postfix.add(opStack.pop());
+					
+					Thread.sleep(sleepTime);
+				}										
+				
+				//EVALUATE POSTFIX
+				evaluatePostfix(postfix);
+			}else{
+
+				output.setText("Syntax error ");					
+			}			
+			
+			Thread t = new Thread();
+			t.start();
+		}catch(InterruptedException e){}
+	}
+	
+	
+	public void start(){		
+		Thread t = new Thread(this);
+		t.start();
+
+	}
+	
+	private boolean infixIsValid(){
+
+		boolean parenthesisHasMatch;
+		boolean noConsecutiveOp;
+		boolean operandsComplete;
+		
+		//	ERROR TRAPPINGS before transforming to postfix
+		ArrayList<Integer> indices = new ArrayList<Integer>();
+		
+		for(int k = 0 ; k < token.length; k++){
+			if(token[k].equals("(")){	
+				indices.add(k);
+			}
+		}
+		
+		boolean temp = true;
+		
+		for(int k = 0; k < token.length; k++){
+			if(decPoint(token[k]) == false){
+				temp = false;
+				break;
+			}
+		}
+		
+		parenthesisHasMatch = parenthesisHasMatch(indices);		
+		noConsecutiveOp = noConsecutiveOp();
+		operandsComplete = operandsComplete();
+		
+		if(parenthesisHasMatch && noConsecutiveOp && operandsComplete && temp == true)
+			return true;
+		return false;
+		
+	}	
+	
+	private boolean operandsComplete(){
+				
+		if(userInput.toCharArray()[userInput.length()-1] == ' ')
+			return false;		
+		
+		return true; 
+	}
+	
+	private boolean decPoint(String s){
+		int num = 0, i = 0;
+		boolean temp = true;
+		
+		while(i < s.length()){
+			if(s.charAt(i) == '.'){
+				num++;
+			}
+			
+			if(num > 1){
+				temp = false;
+				break;
+			}
+			i++;
+		}
+		return temp;
+	}
+	
+	private boolean noConsecutiveOp(){
+		
+		for(int i = 1; i < token.length; i++){			
+			if(isOperator(token[i-1]) && isOperator(token[i]))				
+				return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean parenthesisHasMatch(ArrayList<Integer> indices){
+								
+		ArrayList<Integer> indicesOfMatch = new ArrayList<Integer>();		
+		
+		for(int i = token.length; i >= 0; i--){
+			for(int j = 0; j < token.length; j++){
+				if(token[j].equals(")")){
+					if(!indicesOfMatch.contains(j))
+						indicesOfMatch.add(j);
+				}
+					
+			}
+		}		
+				
+		if(indicesOfMatch.size() == indices.size())
+			return true;
+		
+		return false;
+	}
+	
+	private boolean isLessThan(String op1, String op2){
+		
+		if(op2.equals("*") || op2.equals("/")){
+			if(op1.equals("+") || op1.equals("-"))
+				return true;			
+		}				
+		
+		return false;
+	}
+	
+	private boolean isGreaterOrEqual(String op1, String op2){
+		
+		if(op1.equals("*") || op1.equals("/")){
+			if(op2.equals("*") || op2.equals("/") || op2.equals("+") || op2.equals("-")){
+				return true;
+			}
+						
+		}else if(op1.equals("+") || op1.equals("-")){
+			if(op2.equals("+") || op2.equals("-"))
+				return true;			
+		}
+		
+		return false;
+	}	
+
 	
 	public static void main(String args[]){
 		CrazyCalculatorMain frame = new CrazyCalculatorMain();

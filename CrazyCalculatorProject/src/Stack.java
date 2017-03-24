@@ -3,8 +3,6 @@ import javax.swing.ImageIcon;
 public class Stack {
 	
 	private Queue queue = new Queue();
-	private SnapShots panel = new SnapShots();
-	
 	private static int s = 0;
 	private ImageIcon addIcon = new ImageIcon(getClass().getResource("/images/+.png"));
 	private ImageIcon minusIcon = new ImageIcon(getClass().getResource("/images/-.png"));
@@ -58,32 +56,8 @@ public class Stack {
 	public String peek(){
 		return queue.peek();
 	}
-	
-	public String display(){
-		String s =  queue.display();
-		s+="\nStack\n";
 		
-		Queue temp = new Queue();
-		
-		int i =0;
-		while(i < queue.getSize()){
-			String str;
-			str = queue.dequeue();
-			temp.enqueue(str);
-			s+=str+" -->";
-			
-			i++;
-		}
-		i =0;
-		while(i < temp.getSize()){
-			queue.enqueue(temp.dequeue());
-			i++;
-		}
-		return s;
-	}
-	
 	public void getPanel(SnapShots p){
-		panel = p;
 	}
 	
 }
