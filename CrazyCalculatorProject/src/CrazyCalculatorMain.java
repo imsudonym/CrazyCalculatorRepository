@@ -113,35 +113,35 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 	}	
 	
 	public static void evaluatePostfix(ArrayList<String> postfix){			
+						
+		double value = 0;
 		
-		System.out.println("Inside evaluatePostfix\npostfix size: " + postfix.size());
-		
-		String value;
-		int ctr = 0;
-		
-		String data = postfix.get(ctr++);
-		System.out.println("----->data: " + data);
-		String operand1, operand2;
-		
-		while(ctr < postfix.size()){						
-			System.out.println("data: " + data);
+		for(int i = 0; i < postfix.size(); i++){
+			if(isOperator(postfix.get(i))){
+				if(postfix.get(i).equals("+"))				
+					value = Double.parseDouble(postfix.get(i-2)) + Double.parseDouble(postfix.get(i-1));
+				if(postfix.get(i).equals("-"))
+					value = Double.parseDouble(postfix.get(i-2)) - Double.parseDouble(postfix.get(i-1));
+				if(postfix.get(i).equals("*"))
+					value = Double.parseDouble(postfix.get(i-2)) * Double.parseDouble(postfix.get(i-1));
+				if(postfix.get(i).equals("/"))
+					value = Double.parseDouble(postfix.get(i-2)) / Double.parseDouble(postfix.get(i-1));
 				
-			if(isOperator(data)){
-				System.out.println("data is operator");
-				operand1 = postfixStack.pop();
-				operand2 = postfixStack.pop();
-				evaluate(data, operand1, operand2);
-			}else
-				postfixStack.push(data);
-			
-			data = postfix.get(ctr++);			
-		}		
+				postfix.add(i+1, "" + value);
+
+				int index = i;
+				for(int j = 2; j >= 0; j--){
+					postfix.remove(index-j);
+					index--;
+				}
+				
+				i -= 3;
+			}
+		}
 		
-		value = postfixStack.pop();		
-		
-		output.setText(value);
+		output.setText("" + value + " ");		
 	}
-	
+	/*
 	private static void evaluate(String data, String operand1, String operand2){				
 		
 		double value = 0;
@@ -159,7 +159,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		postfixStack.push(""+value);
 		
 	}
-	
+	*/
 
 	public void run(){
 		
@@ -258,8 +258,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 					Thread.sleep(sleepTime);
 				}										
 				
-				//EVALUATE POSTFIX
-				System.out.println("postfix size: " + postfix.size());
+				//EVALUATE POSTFIX				
 				evaluatePostfix(postfix);
 				
 			}else{
