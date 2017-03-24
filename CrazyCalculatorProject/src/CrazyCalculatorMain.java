@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class CrazyCalculatorMain extends JFrame implements Runnable{
 	
 	private int sleepTime = 500;
+	private static String string = "  Postfix:  ";
 	public static String userInput = " ";
 	public static String[] token; 
 	public static JLabel input, output;
@@ -21,17 +22,23 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 	private static final String[] string1 = {"0", ".", "DEL"}; 
 	private String[] string2 = {"(", ")", "*", "/", "+", "-", "AC", "="};	
 	
+	
+	public static CrazyGUI sShots = new CrazyGUI();	
+	
+	public static Stack opStack = new Stack();	
 	public static ArrayList<String> postfix = new ArrayList<String>();	
-	
-	public static SnapShots sShots = new SnapShots();
-	private JPanel panel = new JPanel();	
-	
-	public static Stack opStack = new Stack(); 
 	
 	public CrazyCalculatorMain(){
 		super("Crazy Calculator");
 		setLayout(null);
+				
+		init();			
 		
+		add(input); add(numbersPane); add(operationsPane);
+		add(output); add(sShots);
+	}
+	
+	private void init(){
 		input = new JLabel(" input");
 		input.setOpaque(true);
 		input.setBackground(Color.WHITE);
@@ -80,9 +87,6 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		
 		sShots.setSize(380,410);
 		sShots.setLocation(381,0);
-		
-		add(input); add(numbersPane); add(operationsPane);
-		add(output); add(sShots);
 	}
 	
 	public class Handler implements ActionListener{
@@ -124,6 +128,8 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 					i--;
 				}				
 				
+				string = "  Postfix:  ";
+				sShots.postfixLabel.setText(string);
 				PseudoArray.ctr = 0;
 			}
 			else if(source == opPad[7]){
@@ -263,12 +269,13 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 							{
 								String data = "";
 								data = opStack.pop();
-								//Thread.sleep(sleepTime);
 								
 								if(!data.equals("(")){									
-									postfix.add(data);
+									postfix.add(data);	
+									postfixUpdate(data);
 									
 									Thread.sleep(sleepTime);
+									
 								}else break;							
 							}							
 						}
@@ -286,7 +293,6 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 								{
 									String data = "";
 									data = opStack.pop();
-									//Thread.sleep(sleepTime);
 									
 									if(data.equals("(")){										
 										opStack.push(data);
@@ -303,6 +309,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 										
 										else if(isGreaterOrEqual(data, token[i])){
 											postfix.add(data);
+											postfixUpdate(data);
 											
 											Thread.sleep(sleepTime);
 											break;
@@ -317,6 +324,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 						// if token is an operand
 						else{																		
 							postfix.add(token[i]);
+							postfixUpdate(token[i]);
 							
 							Thread.sleep(sleepTime);
 						}
@@ -324,7 +332,9 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				
 				// no more items				
 				while(!opStack.isEmpty()){	
-					postfix.add(opStack.pop());
+					String data = opStack.pop();
+					postfix.add(data);
+					postfixUpdate(data);
 					
 					Thread.sleep(sleepTime);
 				}										
@@ -463,6 +473,11 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		return false;
 	}	
 
+	private void postfixUpdate(String str){
+		string += str;
+		
+		sShots.postfixLabel.setText(string);
+	}
 	
 	public static void main(String args[]){
 		CrazyCalculatorMain frame = new CrazyCalculatorMain();

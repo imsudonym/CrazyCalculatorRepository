@@ -57,7 +57,7 @@ public class Queue {
 	public int getSize(){
 		return array.getSize();
 	}
-	
+	/*
 	public String display(){
 		String s = "";//array.display();
 		s+="\nQueue\n";
@@ -70,5 +70,5 @@ public class Queue {
 		}
 		
 		return s;
-	}
+	}*/
 }

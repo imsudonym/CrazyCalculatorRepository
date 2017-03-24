@@ -57,7 +57,7 @@ public class Stack {
 		return queue.peek();
 	}
 		
-	public void getPanel(SnapShots p){
+	public void getPanel(CrazyGUI p){
 	}
 	
 }

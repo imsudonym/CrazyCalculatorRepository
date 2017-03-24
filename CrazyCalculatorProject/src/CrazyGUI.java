@@ -1,30 +1,26 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 
-public class SnapShots extends JPanel{
+public class CrazyGUI extends JPanel{
 		
 	private String s;		
 	
 	private JLabel queueLabel = new JLabel("  Queue:");
 	private JLabel stackLabel = new JLabel("  Stack:");
-	private JLabel postfixLabel = new JLabel("  Postfix:");
-	private JLabel finalLabel = new JLabel("  Final Answer:");
+	protected JLabel postfixLabel = new JLabel("  Postfix:");
+	private JLabel arrayLabel = new JLabel("  Pseudo Array:");
 	
 	public  JLabel[] queueBlocks = new JLabel[10];
 	public JLabel[] stackBlocks = new JLabel[10];
-	public JLabel postfix = new JLabel();
-	
-	private JLabel finalAnswer = new JLabel();
+	public JLabel[] arrayBlocks = new JLabel[10];
 	
 	private JPanel[] panels = new JPanel[4];
 	private JPanel[] inPanels = new JPanel[3];
 	
-	public SnapShots(){
+	public CrazyGUI(){
 
 		setLayout(new GridLayout(4,1));
 		
@@ -40,15 +36,13 @@ public class SnapShots extends JPanel{
 		queueLabel.setFont(new Font("Consolas", Font.BOLD, 14));
 		stackLabel.setFont(new Font("Consolas", Font.BOLD, 14));
 		postfixLabel.setFont(new Font("Consolas", Font.BOLD, 14));
-		finalLabel.setFont(new Font("Consolas", Font.BOLD, 14));
+		arrayLabel.setFont(new Font("Consolas", Font.BOLD, 14));
 		
 		//	inner panels for blocks
-		for(int i = 0; i < 2; i++){
+		for(int i = 0; i < 3; i++){
 			inPanels[i] = new JPanel();
 			inPanels[i].setLayout(new GridLayout(1, 10));			
-		}		
-		
-		inPanels[2] = new JPanel();		
+		}					
 		
 		for(int i = 0; i < 10; i++){
 			queueBlocks[i] = new JLabel();
@@ -62,28 +56,27 @@ public class SnapShots extends JPanel{
 			stackBlocks[i].setOpaque(true);
 			stackBlocks[i].setBorder(BorderFactory.createLineBorder(Color.black));
 			stackBlocks[i].setSize(150,100);
-						
-			postfix.setBackground(Color.WHITE);
-			postfix.setOpaque(true);
-			postfix.setBorder(BorderFactory.createLineBorder(Color.black));
-			//postfix.setSize(150,100);
+
+			
+			arrayBlocks[i] = new JLabel();
+			arrayBlocks[i].setBackground(Color.WHITE);
+			arrayBlocks[i].setOpaque(true);
+			arrayBlocks[i].setBorder(BorderFactory.createLineBorder(Color.black));
+			arrayBlocks[i].setSize(150,100);
 			
 			inPanels[0].add(queueBlocks[i]);
 			inPanels[1].add(stackBlocks[i]);
-			inPanels[2].add(postfix);
+			inPanels[2].add(arrayBlocks[i]);
 		}
 		
 		queueLabel.setBounds(20, 20, 100, 40);
 		stackLabel.setBounds(20, 20, 100, 40);
-		postfixLabel.setBounds(20, 20, 100, 40);
-		finalLabel.setBounds(20, 20, 150, 40);
-		
-		inPanels[0].setBounds(10, 70, 100, 40);
+		arrayLabel.setBounds(20, 20, 100, 40);
 		
 		panels[0].add(queueLabel);
 		panels[1].add(stackLabel);
-		panels[2].add(postfixLabel);
-		panels[3].add(finalLabel);
+		panels[2].add(arrayLabel);
+		panels[3].add(postfixLabel);
 
 		panels[0].add(inPanels[0]);
 		panels[1].add(inPanels[1]);
