@@ -1,9 +1,8 @@
-import javax.swing.ImageIcon;
 
 public class Stack {
 	
 	private Queue queue = new Queue();
-	private static int s = 0;
+	public static int s = 0;
 
 	public boolean isEmpty(){
 		return queue.isEmpty();

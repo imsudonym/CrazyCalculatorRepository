@@ -114,16 +114,13 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 	public static void evaluatePostfix(ArrayList<String> postfix){			
 		
 		String value;
-		int ctr = 0;
+		int ctr = postfix.size()-1;
 		
-		String data = postfix.get(ctr++);
+		String data = postfix.get(ctr--);
 		String operand1, operand2;
 		
-		while(true){						
-			
-			if(ctr == postfix.size()-1)
-				break;
-			
+		while(ctr < 0){						
+
 			if(isOperator(data)){
 				operand1 = postfixStack.pop();
 				operand2 = postfixStack.pop();
@@ -131,7 +128,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 			}else
 				postfixStack.push(data);
 			
-			data = postfix.get(ctr++);
+			data = postfix.get(ctr--);			
 		}		
 		
 		value = postfixStack.pop();		
@@ -399,8 +396,9 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				if(userInput.length() > 1){
 					if(userInput.substring(userInput.length()-2).equals("( ") || userInput.substring(userInput.length() - 2).equals(" )")){
 						userInput = userInput.substring(0, userInput.length() - 2);						
-					}else if(userInput.toCharArray()[userInput.length()-1] == ' '){
-						userInput = userInput.substring(0,userInput.length()-3);
+					}
+					else if(userInput.toCharArray()[userInput.length()-1] == ' '){						
+							userInput = userInput.substring(0,userInput.length()-3);
 					}else{
 						userInput = userInput.substring(0, userInput.length()-1);
 					
@@ -418,7 +416,6 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				
 				int i = postfix.size()-1;
 				
-				//	empty postfix array
 				while(i >= 0){					
 					postfix.remove(i);
 					i--;
@@ -429,6 +426,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				PseudoArray.ctr = 0;
 				PseudoArray.i = 0;
 				PseudoArray.dispInt = 0;
+				Stack.s = 0;
 				
 			}
 			else if(source == opPad[7]){
@@ -436,9 +434,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				input.setText(userInput);
 				output.setText("");
 				
-				int i = postfix.size()-1;
-				
-				//	empty postfix array
+				int i = postfix.size()-1;				
 				while(i >= 0){					
 					postfix.remove(i);
 					i--;
@@ -473,11 +469,19 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 						userInput += "0.";
 				}				
 				
-				if(source == opPad[0])							
-					userInput += string2[0] + " ";									
+				if(source == opPad[0]){
+					if(userInput.toCharArray()[userInput.length()-1] == ' ')
+						userInput += string2[0] + " ";
+					else
+						userInput += " " + string2[0] + " ";
+				}													
 				
-				if(source == opPad[1])	
-					userInput += " " + string2[1];
+				if(source == opPad[1]){
+					if(userInput.toCharArray()[userInput.length()-1] == ' ')
+						userInput += string2[1] + " ";
+					else
+						userInput += " " + string2[1] + " ";
+				}					
 				
 				for(int i = 2; i < opPad.length-1; i++){
 										
