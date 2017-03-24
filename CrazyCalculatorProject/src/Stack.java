@@ -9,6 +9,31 @@ public class Stack {
 	}
 	
 	public void push(String input){
+				
+		displayStack(input);
+		queue.enqueue(input);
+	}
+	
+	public String pop(){ 
+		String str = "";
+		
+		for(int i = 0; i < queue.getSize()-1; i++){
+			queue.enqueue(queue.dequeue());
+		}
+	
+		str = queue.dequeue();
+		
+		if(s > 0)
+			CrazyCalculatorMain.sShots.stackBlocks[--s].setText("");
+		
+		return str;
+	}
+	
+	public String peek(){
+		return queue.peek();
+	}
+		
+	private void displayStack(String input){
 		
 		if(input.equals("+"))
 			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("+");
@@ -23,34 +48,6 @@ public class Stack {
 		if(input.equals(")"))
 			CrazyCalculatorMain.sShots.stackBlocks[s++].setText(")");
 		
-		queue.enqueue(input);
-	}
-	
-	public String pop(){
-		 Queue temp = new Queue();
-		 
-		String str = "";
-		
-		for(int i = 0; i < queue.getSize()-1; i++){
-			temp.enqueue(queue.dequeue());
-		}
-	
-		str = queue.dequeue();
-		
-		for(int j = 0; j < temp.getSize(); j++){
-			queue.enqueue(temp.dequeue());
-		}
-		
-		CrazyCalculatorMain.sShots.stackBlocks[s--].setText("");
-		
-		return str;
-	}
-	
-	public String peek(){
-		return queue.peek();
-	}
-		
-	public void getPanel(CrazyGUI p){
 	}
 	
 }

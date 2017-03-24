@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class CrazyCalculatorMain extends JFrame implements Runnable{
 	
-	private int sleepTime = 500;
+	private int sleepTime = 700;
 	private static String string = "  Postfix:  ";
 	public static String userInput = " ";
 	public static String[] token; 
@@ -47,6 +47,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		input.setSize(320,40); 
 		input.setLocation(20,20);
 		input.setFont(new Font("Consolas", Font.BOLD, 14));
+		
 		JScrollBar scrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
 		scrollBar.setSize(320,17); 
 		scrollBar.setLocation(20,62);
@@ -113,29 +114,35 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 	
 	public static void evaluatePostfix(ArrayList<String> postfix){			
 		
-		String value;
-		int ctr = postfix.size()-1;
+		System.out.println("Inside evaluatePostfix\npostfix size: " + postfix.size());
 		
-		String data = postfix.get(ctr--);
+		String value;
+		int ctr = 0;
+		
+		String data = postfix.get(ctr++);
+		System.out.println("----->data: " + data);
 		String operand1, operand2;
 		
-		while(ctr < 0){						
-
+		while(ctr < postfix.size()){						
+			System.out.println("data: " + data);
+				
 			if(isOperator(data)){
+				System.out.println("data is operator");
 				operand1 = postfixStack.pop();
 				operand2 = postfixStack.pop();
 				evaluate(data, operand1, operand2);
 			}else
 				postfixStack.push(data);
 			
-			data = postfix.get(ctr--);			
+			data = postfix.get(ctr++);			
 		}		
 		
 		value = postfixStack.pop();		
+		
 		output.setText(value);
 	}
 	
-	private static void evaluate(String data, String operand1, String operand2){		
+	private static void evaluate(String data, String operand1, String operand2){				
 		
 		double value = 0;
 		
@@ -148,6 +155,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		if(data.equals("/"))		
 			value = Double.parseDouble(operand1) / Double.parseDouble(operand2);
 		
+		System.out.println("push: " + value);
 		postfixStack.push(""+value);
 		
 	}
@@ -175,11 +183,11 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 							{
 								String data = "";
 								data = opStack.pop();
+								Thread.sleep(sleepTime);
 								
 								if(!data.equals("(")){									
-									postfix.add(data);	
+									postfix.add(data);										
 									postfixUpdate(data);
-									
 									Thread.sleep(sleepTime);
 									
 								}else break;							
@@ -198,6 +206,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 								{
 									String data = "";
 									data = opStack.pop();
+									Thread.sleep(sleepTime);
 									
 									if(data.equals("(")){										
 										opStack.push(data);
@@ -219,10 +228,14 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 											Thread.sleep(sleepTime);
 											break;
 										}
-									}									
+										Thread.sleep(sleepTime);
+									}		
+									
+									
 								}
 								
 								opStack.push(token[i]);	
+								Thread.sleep(sleepTime);
 							}											
 						}	
 						
@@ -237,6 +250,8 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				while(!opStack.isEmpty()){
 					
 					String data = opStack.pop();
+					Thread.sleep(sleepTime);
+					
 					postfix.add(data);
 					postfixUpdate(data);
 					
@@ -244,7 +259,9 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				}										
 				
 				//EVALUATE POSTFIX
+				System.out.println("postfix size: " + postfix.size());
 				evaluatePostfix(postfix);
+				
 			}else{
 
 				output.setText("Syntax error ");					
@@ -289,6 +306,10 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		parenthesisHasMatch = parenthesisHasMatch(indices);		
 		noConsecutiveOp = noConsecutiveOp();
 		operandsComplete = operandsComplete();
+		
+		//System.out.println("parenthesisHasMatch: " + parenthesisHasMatch);
+		//System.out.println("noConsecutiveOp: " + noConsecutiveOp);
+		//System.out.println("operandsComplete: " + operandsComplete);
 		
 		if(parenthesisHasMatch && noConsecutiveOp && operandsComplete && temp == true)
 			return true;
@@ -427,6 +448,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				PseudoArray.i = 0;
 				PseudoArray.dispInt = 0;
 				Stack.s = 0;
+				Queue.q = 0;
 				
 			}
 			else if(source == opPad[7]){
@@ -445,6 +467,8 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				PseudoArray.ctr = 0;
 				PseudoArray.i = 0;
 				PseudoArray.dispInt = 0;
+				Stack.s = 0;
+				Queue.q = 0;
 				
 				start();
 				
@@ -480,7 +504,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 					if(userInput.toCharArray()[userInput.length()-1] == ' ')
 						userInput += string2[1] + " ";
 					else
-						userInput += " " + string2[1] + " ";
+						userInput += " " + string2[1];
 				}					
 				
 				for(int i = 2; i < opPad.length-1; i++){

@@ -1,5 +1,4 @@
 import javax.swing.*;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -46,6 +45,7 @@ public class CrazyGUI extends JPanel{
 		
 		for(int i = 0; i < 20; i++){
 			queueBlocks[i] = new JLabel("", SwingConstants.CENTER);
+			queueBlocks[i].setFont(new Font("Consolas", Font.BOLD, 38));
 			queueBlocks[i].setBackground(Color.WHITE);
 			queueBlocks[i].setOpaque(true);
 			queueBlocks[i].setBorder(BorderFactory.createLineBorder(Color.black));
