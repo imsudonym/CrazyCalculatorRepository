@@ -42,7 +42,7 @@ public class Stack {
 			queue.enqueue(temp.dequeue());
 		}
 		
-		CrazyCalculatorMain.sShots.stackBlocks[--s].setText("");
+		CrazyCalculatorMain.sShots.stackBlocks[s--].setText("");
 		
 		return str;
 	}
