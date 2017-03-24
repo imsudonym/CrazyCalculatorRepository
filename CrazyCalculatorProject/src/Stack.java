@@ -4,13 +4,7 @@ public class Stack {
 	
 	private Queue queue = new Queue();
 	private static int s = 0;
-	private ImageIcon addIcon = new ImageIcon(getClass().getResource("/images/+.png"));
-	private ImageIcon minusIcon = new ImageIcon(getClass().getResource("/images/-.png"));
-	private ImageIcon mulIcon = new ImageIcon(getClass().getResource("/images/x.png"));
-	private ImageIcon divIcon = new ImageIcon(getClass().getResource("/images/div.png"));
-	private ImageIcon oppIcon = new ImageIcon(getClass().getResource("/images/(.png"));
-	private ImageIcon clospIcon = new ImageIcon(getClass().getResource("/images/).png"));
-	
+
 	public boolean isEmpty(){
 		return queue.isEmpty();
 	}
@@ -18,17 +12,17 @@ public class Stack {
 	public void push(String input){
 		
 		if(input.equals("+"))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setIcon(addIcon);
+			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("+");
 		if(input.equals("-"))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setIcon(minusIcon);
+			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("-");
 		if(input.equals("*"))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setIcon(mulIcon);
+			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("x");
 		if(input.equals("/"))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setIcon(divIcon);
+			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("/");
 		if(input.equals("("))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setIcon(oppIcon);
+			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("(");
 		if(input.equals(")"))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setIcon(clospIcon);
+			CrazyCalculatorMain.sShots.stackBlocks[s++].setText(")");
 		
 		queue.enqueue(input);
 	}
@@ -48,7 +42,7 @@ public class Stack {
 			queue.enqueue(temp.dequeue());
 		}
 		
-		CrazyCalculatorMain.sShots.stackBlocks[--s].setIcon(null);
+		CrazyCalculatorMain.sShots.stackBlocks[--s].setText("");
 		
 		return str;
 	}

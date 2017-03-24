@@ -57,18 +57,5 @@ public class Queue {
 	public int getSize(){
 		return array.getSize();
 	}
-	/*
-	public String display(){
-		String s = "";//array.display();
-		s+="\nQueue\n";
-		
-		int i = 0;
-		
-		while(i != getSize()){
-			s+= " "+array.get(i).getValue()+" -->";
-			i++;
-		}
-		
-		return s;
-	}*/
+	
 }

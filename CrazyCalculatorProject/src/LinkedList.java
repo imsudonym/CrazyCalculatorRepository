@@ -54,18 +54,5 @@ public class LinkedList{
 		
 		return null;
 	}
-	
-	public String display(){
-		String s = "\nLinked List\n";
-		Link current = first;
 		
-		while(current.next != null){
-			s+=current.getValue()+" -->";
-			current = current.next;
-		}
-		
-		s+=current.getValue()+" -->";
-		
-		return s;
-	}
 }

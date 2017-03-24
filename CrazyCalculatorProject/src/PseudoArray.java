@@ -1,5 +1,8 @@
 
 public class PseudoArray {
+	
+	public static int dispInt = 0;
+	public static int i = 0;
 	private int size;	
 	public static int ctr = 0;
 	private LinkedList list = new LinkedList();	
@@ -14,11 +17,15 @@ public class PseudoArray {
 	
 	public void add(String value){
 		if(ctr <= size){
+			
 			Link newLink = new Link(value, ctr);
 			list.add(newLink);
 			ctr++;
+			
+			//CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText(value);
+			
 		}else{
-			throw new java.lang.RuntimeException("Bad.");
+			throw new java.lang.RuntimeException("ArrayIndexOutOfBounds.");
 		}
 		
 	}
@@ -28,27 +35,16 @@ public class PseudoArray {
 	}
 	
 	public String remove(){
-		ctr--;
-		return list.remove();
+		ctr--;		
+		
+		String data = list.remove(); 
+		//CrazyCalculatorMain.sShots.arrayBlocks[i++].setText("");
+		
+		return data;
 		
 	}
 	
 	public int getSize(){
 		return ctr;
-	}
-	
-	public String display(){
-		String s = list.display();
-		s+="\n\nPseudoArray\n";
-		
-		int i = 0;
-		System.out.println("ctr = "+ctr);
-		
-		while(i < ctr){
-			String str = get(i).getValue();
-			s+= str+" -->";
-			i++;
-		}
-		return s;
-	}
+	}	
 }

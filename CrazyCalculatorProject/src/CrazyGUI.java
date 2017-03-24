@@ -13,9 +13,9 @@ public class CrazyGUI extends JPanel{
 	protected JLabel postfixLabel = new JLabel("  Postfix:");
 	private JLabel arrayLabel = new JLabel("  Pseudo Array:");
 	
-	public  JLabel[] queueBlocks = new JLabel[10];
-	public JLabel[] stackBlocks = new JLabel[10];
-	public JLabel[] arrayBlocks = new JLabel[10];
+	public  JLabel[] queueBlocks = new JLabel[20];
+	public JLabel[] stackBlocks = new JLabel[20];
+	public JLabel[] arrayBlocks = new JLabel[20];
 	
 	private JPanel[] panels = new JPanel[4];
 	private JPanel[] inPanels = new JPanel[3];
@@ -35,7 +35,7 @@ public class CrazyGUI extends JPanel{
 		// labels for queue, stack, postfix, final answer
 		queueLabel.setFont(new Font("Consolas", Font.BOLD, 14));
 		stackLabel.setFont(new Font("Consolas", Font.BOLD, 14));
-		postfixLabel.setFont(new Font("Consolas", Font.BOLD, 14));
+		postfixLabel.setFont(new Font("Consolas", Font.BOLD, 20));
 		arrayLabel.setFont(new Font("Consolas", Font.BOLD, 14));
 		
 		//	inner panels for blocks
@@ -44,21 +44,22 @@ public class CrazyGUI extends JPanel{
 			inPanels[i].setLayout(new GridLayout(1, 10));			
 		}					
 		
-		for(int i = 0; i < 10; i++){
-			queueBlocks[i] = new JLabel();
+		for(int i = 0; i < 20; i++){
+			queueBlocks[i] = new JLabel("", SwingConstants.CENTER);
 			queueBlocks[i].setBackground(Color.WHITE);
 			queueBlocks[i].setOpaque(true);
 			queueBlocks[i].setBorder(BorderFactory.createLineBorder(Color.black));
 			queueBlocks[i].setSize(150,100);
 			
-			stackBlocks[i] = new JLabel();
+			stackBlocks[i] = new JLabel("", SwingConstants.CENTER);
+			stackBlocks[i].setFont(new Font("Consolas", Font.BOLD, 38));
 			stackBlocks[i].setBackground(Color.WHITE);
 			stackBlocks[i].setOpaque(true);
 			stackBlocks[i].setBorder(BorderFactory.createLineBorder(Color.black));
 			stackBlocks[i].setSize(150,100);
 
 			
-			arrayBlocks[i] = new JLabel();
+			arrayBlocks[i] = new JLabel("", SwingConstants.CENTER);
 			arrayBlocks[i].setBackground(Color.WHITE);
 			arrayBlocks[i].setOpaque(true);
 			arrayBlocks[i].setBorder(BorderFactory.createLineBorder(Color.black));

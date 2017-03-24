@@ -12,8 +12,8 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 	private static String string = "  Postfix:  ";
 	public static String userInput = " ";
 	public static String[] token; 
-	public static JLabel input, output;
-	private JPanel numbersPane, operationsPane;
+	public static JTextField input, output;
+	private static JPanel numbersPane, operationsPane;	
 	
 	//Buttons
 	private JButton[] numPad = new JButton[12];	
@@ -39,25 +39,34 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 	}
 	
 	private void init(){
-		input = new JLabel(" input");
+		
+		input = new JTextField(" input");
+		input.setEditable(false);
 		input.setOpaque(true);
 		input.setBackground(Color.WHITE);
 		input.setSize(320,40); 
 		input.setLocation(20,20);
-		input.setFont(new Font("Consolas", Font.BOLD, 14));		
+		input.setFont(new Font("Consolas", Font.BOLD, 14));
+		JScrollBar scrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
+		scrollBar.setSize(320,17); 
+		scrollBar.setLocation(20,62);
+		BoundedRangeModel brm = input.getHorizontalVisibility();
+	    scrollBar.setModel(brm);
+	    add(scrollBar);
 		
-		output = new JLabel("output ");
+		output = new JTextField("output ");
+		output.setEditable(false);
 		output.setOpaque(true);
 		output.setBackground(Color.WHITE);
 		output.setSize(320, 40);
-		output.setLocation(20,60);
+		output.setLocation(20,80);
 		output.setHorizontalAlignment(JLabel.RIGHT);
 		output.setFont(new Font("Consolas", Font.BOLD, 14));
 		
 		
 		numbersPane = new JPanel();
 		numbersPane.setSize(170,200);
-		numbersPane.setLocation(20,110);
+		numbersPane.setLocation(20,140);
 		numbersPane.setLayout(new GridLayout(4,3, 1, 1));
 		
 		Handler handler = new Handler();
@@ -77,7 +86,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		
 		operationsPane = new JPanel();
 		operationsPane.setSize(140,200);
-		operationsPane.setLocation(200,110);
+		operationsPane.setLocation(200,140);
 		operationsPane.setLayout(new GridLayout(4, 2, 1, 1));
 		for(int i = 0; i < string2.length; i++){
 			opPad[i] = new JButton(string2[i]);
@@ -85,7 +94,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 			operationsPane.add(opPad[i]);
 		}
 		
-		sShots.setSize(380,410);
+		sShots.setSize(600,410);
 		sShots.setLocation(381,0);
 	}
 	
@@ -131,9 +140,29 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				string = "  Postfix:  ";
 				sShots.postfixLabel.setText(string);
 				PseudoArray.ctr = 0;
+				PseudoArray.i = 0;
+				PseudoArray.dispInt = 0;
+				
 			}
 			else if(source == opPad[7]){
 								
+				input.setText(userInput);
+				output.setText("");
+				
+				int i = postfix.size()-1;
+				
+				//	empty postfix array
+				while(i >= 0){					
+					postfix.remove(i);
+					i--;
+				}				
+				
+				string = "  Postfix:  ";
+				sShots.postfixLabel.setText(string);
+				PseudoArray.ctr = 0;
+				PseudoArray.i = 0;
+				PseudoArray.dispInt = 0;
+				
 				start();
 				
 			}			
@@ -482,7 +511,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 	public static void main(String args[]){
 		CrazyCalculatorMain frame = new CrazyCalculatorMain();
 		
-		frame.setSize(2*380+30,410);
+		frame.setSize(1050,410);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
