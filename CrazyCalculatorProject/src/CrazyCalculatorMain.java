@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class CrazyCalculatorMain extends JFrame implements Runnable{
 	
-	private int sleepTime = 700;
+	private static int sleepTime = 600;
 	private static String string = "  Postfix:  ";
 	public static String userInput = " ";
 	public static String[] token; 
@@ -43,14 +43,14 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		input = new JTextField(" input");
 		input.setEditable(false);
 		input.setOpaque(true);
-		input.setBackground(Color.WHITE);
-		input.setSize(320,40); 
-		input.setLocation(20,20);
+		input.setSize(320, 40);
+		input.setLocation(20,62);
+		input.setBackground(Color.WHITE);		
 		input.setFont(new Font("Consolas", Font.BOLD, 14));
 		
 		JScrollBar scrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
 		scrollBar.setSize(320,17); 
-		scrollBar.setLocation(20,62);
+		scrollBar.setLocation(20,103);
 		BoundedRangeModel brm = input.getHorizontalVisibility();
 	    scrollBar.setModel(brm);
 	    add(scrollBar);
@@ -58,9 +58,9 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		output = new JTextField("output ");
 		output.setEditable(false);
 		output.setOpaque(true);
-		output.setBackground(Color.WHITE);
-		output.setSize(320, 40);
-		output.setLocation(20,80);
+		output.setBackground(Color.WHITE);		
+		output.setSize(320,40); 
+		output.setLocation(20,20);
 		output.setHorizontalAlignment(JLabel.RIGHT);
 		output.setFont(new Font("Consolas", Font.BOLD, 14));
 		
@@ -73,7 +73,8 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		Handler handler = new Handler();
 		
 		for(int i = 8; i >= 0; i--){
-			numPad[i] = new JButton("" + (i+1));			
+			numPad[i] = new JButton("" + (i+1));	
+			numPad[i].setFont(new Font("Consolas", Font.BOLD, 12));
 			numPad[i].addActionListener(handler);
 			numbersPane.add(numPad[i]);
 		}
@@ -81,6 +82,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		int j = 9;
 		for(int i = 0; i < string1.length; i++){
 			numPad[j] = new JButton(string1[i]);
+			numPad[j].setFont(new Font("Consolas", Font.BOLD, 12));
 			numPad[j].addActionListener(handler);
 			numbersPane.add(numPad[j++]);
 		}
@@ -91,11 +93,12 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		operationsPane.setLayout(new GridLayout(4, 2, 1, 1));
 		for(int i = 0; i < string2.length; i++){
 			opPad[i] = new JButton(string2[i]);
+			opPad[i].setFont(new Font("Consolas", Font.BOLD, 12));
 			opPad[i].addActionListener(handler);
 			operationsPane.add(opPad[i]);
 		}
 		
-		sShots.setSize(600,410);
+		sShots.setSize(825,410);
 		sShots.setLocation(381,0);
 	}
 	
@@ -110,167 +113,180 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		}
 		
 		return false;
-	}	
+	}
 	
 	public static void evaluatePostfix(ArrayList<String> postfix){			
-						
-		double value = 0;
-		
-		for(int i = 0; i < postfix.size(); i++){
-			if(isOperator(postfix.get(i))){
-				if(postfix.get(i).equals("+"))				
-					value = Double.parseDouble(postfix.get(i-2)) + Double.parseDouble(postfix.get(i-1));
-				if(postfix.get(i).equals("-"))
-					value = Double.parseDouble(postfix.get(i-2)) - Double.parseDouble(postfix.get(i-1));
-				if(postfix.get(i).equals("*"))
-					value = Double.parseDouble(postfix.get(i-2)) * Double.parseDouble(postfix.get(i-1));
-				if(postfix.get(i).equals("/"))
-					value = Double.parseDouble(postfix.get(i-2)) / Double.parseDouble(postfix.get(i-1));
-				
-				postfix.add(i+1, "" + value);
 
-				int index = i;
-				for(int j = 2; j >= 0; j--){
-					postfix.remove(index-j);
-					index--;
-				}
+			String value;
+			int ctr = 1;
+			
+			String data = postfix.get(ctr++);				
+			String operand1, operand2;
+			
+			while(true){
 				
-				i -= 3;
-			}
+				if(isOperator(data)){					
+					operand1 = postfixStack.pop();
+					sShots.postfixEvaBlocks[Stack.var--].setText("");
+					
+					operand2 = postfixStack.pop();					
+					sShots.postfixEvaBlocks[Stack.var--].setText("");
+					
+					evaluate(data, operand1, operand2);					
+					
+				}else{					
+					postfixStack.push(data);
+					
+				}
+									
+				if(ctr == postfix.size())
+					break;
+				
+				data = postfix.get(ctr++);				
+			}		
+			
+			value = postfixStack.pop();
+			sShots.postfixEvaBlocks[Stack.var--].setText("");
+			output.setText(value + " ");
 		}
-		
-		output.setText("" + value + " ");		
-	}
-	/*
+
 	private static void evaluate(String data, String operand1, String operand2){				
 		
 		double value = 0;
 		
 		if(data.equals("+"))
-			value = Double.parseDouble(operand1) + Double.parseDouble(operand2);
+			value = Double.parseDouble(operand2) + Double.parseDouble(operand1);
 		if(data.equals("-"))
-			value = Double.parseDouble(operand1) - Double.parseDouble(operand2);
+			value = Double.parseDouble(operand2) - Double.parseDouble(operand1);
 		if(data.equals("*"))
-			value = Double.parseDouble(operand1) * Double.parseDouble(operand2);
+			value = Double.parseDouble(operand2) * Double.parseDouble(operand1);
 		if(data.equals("/"))		
-			value = Double.parseDouble(operand1) / Double.parseDouble(operand2);
-		
-		System.out.println("push: " + value);
+			value = Double.parseDouble(operand2) / Double.parseDouble(operand1);
+				
 		postfixStack.push(""+value);
 		
-	}
-	*/
+	}	
 
 	public void run(){
 		
-		try{
-			
-			token = userInput.split(" ");							
-			
-			if(infixIsValid()){
+		token = userInput.split(" ");							
+		
+		if(infixIsValid()){
 
-				for(int i = 0; i < token.length; i++)
-				{		
+			for(int i = 0; i < token.length; i++)
+			{		
 
-						if(token[i].equals("(")){	
-							opStack.push(token[i]);	
-							Thread.sleep(sleepTime);
-						}
+					if(token[i].equals("(")){	
+						opStack.push(token[i]);	
+						makeThreadSleep();
+					}
+					
+					else if(token[i].equals(")")){
 						
-						else if(token[i].equals(")")){
+						while(!opStack.isEmpty())
+						{
+							String data = "";
+							data = opStack.pop();
+							makeThreadSleep();
 							
+							if(!data.equals("(")){									
+								postfix.add(data);										
+								postfixUpdate(data);
+								makeThreadSleep();
+								
+							}else break;							
+						}							
+					}
+					
+					else if(isOperator(token[i])){																
+						
+						if(opStack.isEmpty()){
+							opStack.push(token[i]);
+							makeThreadSleep();
+						}
+						else{
+
 							while(!opStack.isEmpty())
 							{
 								String data = "";
 								data = opStack.pop();
-								Thread.sleep(sleepTime);
+								makeThreadSleep();
 								
-								if(!data.equals("(")){									
-									postfix.add(data);										
-									postfixUpdate(data);
-									Thread.sleep(sleepTime);
-									
-								}else break;							
-							}							
-						}
-						
-						else if(isOperator(token[i])){																
-							
-							if(opStack.isEmpty()){
-								opStack.push(token[i]);
-								Thread.sleep(sleepTime);
-							}
-							else{
-
-								while(!opStack.isEmpty())
-								{
-									String data = "";
-									data = opStack.pop();
-									Thread.sleep(sleepTime);
-									
-									if(data.equals("(")){										
+								if(data.equals("(")){										
+									opStack.push(data);
+									makeThreadSleep();
+									break;
+								}
+								
+								if(isOperator(data)){
+									if(isLessThan(data, token[i])){
 										opStack.push(data);
-										Thread.sleep(sleepTime);
+										makeThreadSleep();
 										break;
 									}
 									
-									if(isOperator(data)){
-										if(isLessThan(data, token[i])){
-											opStack.push(data);
-											Thread.sleep(sleepTime);
-											break;
-										}
+									else if(isGreaterOrEqual(data, token[i])){
+										postfix.add(data);
+										postfixUpdate(data);
 										
-										else if(isGreaterOrEqual(data, token[i])){
-											postfix.add(data);
-											postfixUpdate(data);
-											
-											Thread.sleep(sleepTime);
-											break;
-										}
-										Thread.sleep(sleepTime);
-									}		
-									
-									
-								}
+										makeThreadSleep();
+										break;
+									}
+									makeThreadSleep();
+								}		
 								
-								opStack.push(token[i]);	
-								Thread.sleep(sleepTime);
-							}											
-						}	
-						
-						else{																		
-							postfix.add(token[i]);
-							postfixUpdate(token[i]);
+								
+							}
 							
-							Thread.sleep(sleepTime);
-						}
-				}	// end parse
-								
-				while(!opStack.isEmpty()){
+							opStack.push(token[i]);	
+							makeThreadSleep();
+						}											
+					}	
 					
-					String data = opStack.pop();
-					Thread.sleep(sleepTime);
-					
-					postfix.add(data);
-					postfixUpdate(data);
-					
-					Thread.sleep(sleepTime);
-				}										
+					else{																		
+						postfix.add(token[i]);
+						postfixUpdate(token[i]);
+						
+						makeThreadSleep();
+					}
+			}	// end parse
+							
+			while(!opStack.isEmpty()){
 				
-				//EVALUATE POSTFIX				
-				evaluatePostfix(postfix);
+				String data = opStack.pop();
+				makeThreadSleep();
 				
-			}else{
-
-				output.setText("Syntax error ");					
-			}			
+				postfix.add(data);
+				postfixUpdate(data);
+				
+				makeThreadSleep();
+			}										
 			
-			Thread t = new Thread();
-			t.start();
-		}catch(InterruptedException e){}
+			//EVALUATE POSTFIX				
+			evaluatePostfix(postfix);
+			
+		}else{
+			
+			output.setForeground(Color.RED);
+			output.setText("Syntax error ");					
+		}			
+		
+		Thread t = new Thread();
+		t.start();
 	}
 	
+	public static void makeThreadSleep(){
+		try{
+			
+			Thread.sleep(sleepTime);
+			
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+			
+		
+		
+	}
 	
 	public void start(){		
 		Thread t = new Thread(this);
@@ -304,11 +320,7 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 		
 		parenthesisHasMatch = parenthesisHasMatch(indices);		
 		noConsecutiveOp = noConsecutiveOp();
-		operandsComplete = operandsComplete();
-		
-		//System.out.println("parenthesisHasMatch: " + parenthesisHasMatch);
-		//System.out.println("noConsecutiveOp: " + noConsecutiveOp);
-		//System.out.println("operandsComplete: " + operandsComplete);
+		operandsComplete = operandsComplete();		
 		
 		if(parenthesisHasMatch && noConsecutiveOp && operandsComplete && temp == true)
 			return true;
@@ -443,11 +455,18 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				
 				string = "  Postfix:  ";
 				sShots.postfixLabel.setText(string);
-				PseudoArray.ctr = 0;
-				PseudoArray.i = 0;
-				PseudoArray.dispInt = 0;
+				sShots.postfixEvaBlocks[0].setText("");
 				Stack.s = 0;
-				Queue.q = 0;
+				Stack.var = 0;
+				PseudoArray.ctr = 0;
+				PseudoArray.temp = 0;
+				PseudoArray.dispInt = 0;				
+				Queue.dispInt = 0;
+				Queue.temp = 0;
+				LinkedList.dispInt = 0;
+				LinkedList.ctr = 0;
+				
+				output.setForeground(Color.black);
 				
 			}
 			else if(source == opPad[7]){
@@ -463,11 +482,15 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 				
 				string = "  Postfix:  ";
 				sShots.postfixLabel.setText(string);
-				PseudoArray.ctr = 0;
-				PseudoArray.i = 0;
-				PseudoArray.dispInt = 0;
 				Stack.s = 0;
-				Queue.q = 0;
+				Stack.var = 0;
+				PseudoArray.ctr = 0;
+				PseudoArray.temp = 0;
+				PseudoArray.dispInt = 0;				
+				Queue.dispInt = 0;
+				Queue.temp = 0;
+				LinkedList.dispInt = 0;
+				LinkedList.ctr = 0;
 				
 				start();
 				
@@ -475,8 +498,13 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 			else{				
 				
 				for(int j = 0; j < 9; j++){
-					if(source == numPad[j])
-						userInput += "" + (j + 1);						
+					if(source == numPad[j]){
+						if(isOperator(""+userInput.toCharArray()[userInput.length()-1]))
+							userInput += " " + (j + 1);
+						else
+							userInput += "" + (j + 1);
+					}
+												
 				}
 				
 				if(source == numPad[9])
@@ -534,8 +562,10 @@ public class CrazyCalculatorMain extends JFrame implements Runnable{
 	public static void main(String args[]){
 		CrazyCalculatorMain frame = new CrazyCalculatorMain();
 		
-		frame.setSize(1050,410);
+		frame.setSize(1250,420);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		frame.setResizable(false);
 	}
 }
