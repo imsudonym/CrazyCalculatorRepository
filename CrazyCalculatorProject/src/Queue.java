@@ -1,29 +1,29 @@
-public class Queue {
+public class Queue{
 	PseudoArray array = new PseudoArray(100);	
-		
-	public static int q = 0;	
+	public static int dispInt = 0;
+	public static int temp = 0; 		
 	
 	public boolean isEmpty(){
 		return array.isEmpty();
 	}
 	
 	public void enqueue(String input){
-		
-		for(int i = 0; i < array.getSize(); i++){
-			CrazyCalculatorMain.sShots.queueBlocks[i].setText(CrazyCalculatorMain.sShots.queueBlocks[i+1].getText());
-		}
-		
+				
 		displayQueue(input);
+		CrazyCalculatorMain.makeThreadSleep();		
 		array.add(input);
 	}
 	
 	public String dequeue(){
+
+		if(temp < 20)
+			CrazyCalculatorMain.sShots.queueBlocks[temp++].setText("");
 		
-		for(int i = 0; i < array.getSize(); i++){
-			CrazyCalculatorMain.sShots.queueBlocks[i].setText(CrazyCalculatorMain.sShots.queueBlocks[i+1].getText());
-		}
+		if(temp == dispInt){
+			temp = 0; dispInt = 0;			
+		}			
 		
-		q--;		
+		CrazyCalculatorMain.makeThreadSleep();			
 		return array.remove();
 	}
 	
@@ -38,18 +38,17 @@ public class Queue {
 	private void displayQueue(String input){
 		
 		if(input.equals("+"))
-			CrazyCalculatorMain.sShots.queueBlocks[q++].setText("+");
+			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText("+");
 		if(input.equals("-"))
-			CrazyCalculatorMain.sShots.queueBlocks[q++].setText("-");
+			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText("-");
 		if(input.equals("*"))
-			CrazyCalculatorMain.sShots.queueBlocks[q++].setText("x");
+			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText("x");
 		if(input.equals("/"))
-			CrazyCalculatorMain.sShots.queueBlocks[q++].setText("/");
+			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText("/");
 		if(input.equals("("))
-			CrazyCalculatorMain.sShots.queueBlocks[q++].setText("(");
+			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText("(");
 		if(input.equals(")"))
-			CrazyCalculatorMain.sShots.queueBlocks[q++].setText(")");
-		
+			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText(")");		
 	}
 	
 }

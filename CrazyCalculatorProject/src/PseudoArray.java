@@ -2,7 +2,7 @@
 public class PseudoArray {
 	
 	public static int dispInt = 0;
-	public static int i = 0;
+	public static int temp = 0;
 	private int size;	
 	public static int ctr = 0;
 	private LinkedList list = new LinkedList();	
@@ -22,7 +22,7 @@ public class PseudoArray {
 			list.add(newLink);
 			ctr++;
 			
-			//CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText(value);
+			display(value);
 			
 		}else{
 			throw new java.lang.RuntimeException("ArrayIndexOutOfBounds.");
@@ -38,7 +38,13 @@ public class PseudoArray {
 		ctr--;		
 		
 		String data = list.remove(); 
-		//CrazyCalculatorMain.sShots.arrayBlocks[i++].setText("");
+		
+		if(temp < 20)
+			CrazyCalculatorMain.sShots.arrayBlocks[temp++].setText("");
+		
+		if(temp == dispInt){
+			temp = 0;  dispInt = 0;			
+		}
 		
 		return data;
 		
@@ -47,4 +53,20 @@ public class PseudoArray {
 	public int getSize(){
 		return ctr;
 	}	
+	
+	private void display(String input){
+		
+		if(input.equals("+"))
+			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText("+");
+		if(input.equals("-"))
+			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText("-");
+		if(input.equals("*"))
+			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText("x");
+		if(input.equals("/"))
+			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText("/");
+		if(input.equals("("))
+			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText("(");
+		if(input.equals(")"))
+			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText(")");		
+	}
 }
