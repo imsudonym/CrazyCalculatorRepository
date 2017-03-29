@@ -40,7 +40,7 @@ public class PseudoArray {
 		String data = list.remove(); 
 		
 		if(temp < 20)
-			CrazyCalculatorMain.sShots.arrayBlocks[temp++].setText("");
+			CrazyCalculator.sShots.arrayBlocks[temp++].setText("");
 		
 		if(temp == dispInt){
 			temp = 0;  dispInt = 0;			
@@ -57,16 +57,16 @@ public class PseudoArray {
 	private void display(String input){
 		
 		if(input.equals("+"))
-			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText("+");
+			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("+");
 		if(input.equals("-"))
-			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText("-");
+			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("-");
 		if(input.equals("*"))
-			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText("x");
+			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("x");
 		if(input.equals("/"))
-			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText("/");
+			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("/");
 		if(input.equals("("))
-			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText("(");
+			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("(");
 		if(input.equals(")"))
-			CrazyCalculatorMain.sShots.arrayBlocks[dispInt++].setText(")");		
+			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText(")");		
 	}
 }

@@ -30,7 +30,7 @@ public class Stack {
 		}
 		
 		if(s > 0)
-			CrazyCalculatorMain.sShots.stackBlocks[--s].setText("");
+			CrazyCalculator.sShots.stackBlocks[--s].setText("");
 		
 		return str;
 				
@@ -43,19 +43,19 @@ public class Stack {
 	private void displayStack(String input){
 		
 		if(input.equals("+"))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("+");
+			CrazyCalculator.sShots.stackBlocks[s++].setText("+");
 		else if(input.equals("-"))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("-");
+			CrazyCalculator.sShots.stackBlocks[s++].setText("-");			
 		else if(input.equals("*"))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("x");
+			CrazyCalculator.sShots.stackBlocks[s++].setText("x");
 		else if(input.equals("/"))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("/");
+			CrazyCalculator.sShots.stackBlocks[s++].setText("/");
 		else if(input.equals("("))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setText("(");
+			CrazyCalculator.sShots.stackBlocks[s++].setText("(");
 		else if(input.equals(")"))
-			CrazyCalculatorMain.sShots.stackBlocks[s++].setText(")");
+			CrazyCalculator.sShots.stackBlocks[s++].setText(")");
 		else
-			CrazyCalculatorMain.sShots.postfixEvaBlocks[var++].setText(input);
+			CrazyCalculator.sShots.postfixEvaBlocks[var++].setText(input);
 		
 	}
 	

@@ -48,7 +48,7 @@ public class LinkedList{
 		Link temp = null;
 		
 		if(ctr < 20)
-			CrazyCalculatorMain.sShots.linkListBlocks[ctr++].setText("");
+			CrazyCalculator.sShots.linkListBlocks[ctr++].setText("");
 		
 		if(ctr == dispInt){
 			ctr = 0; dispInt = 0;
@@ -69,17 +69,17 @@ public class LinkedList{
 	private void display(String input){
 		
 		if(input.equals("+"))
-			CrazyCalculatorMain.sShots.linkListBlocks[dispInt++].setText("+");
+			CrazyCalculator.sShots.linkListBlocks[dispInt++].setText("+");
 		if(input.equals("-"))
-			CrazyCalculatorMain.sShots.linkListBlocks[dispInt++].setText("-");
+			CrazyCalculator.sShots.linkListBlocks[dispInt++].setText("-");
 		if(input.equals("*"))
-			CrazyCalculatorMain.sShots.linkListBlocks[dispInt++].setText("x");
+			CrazyCalculator.sShots.linkListBlocks[dispInt++].setText("x");
 		if(input.equals("/"))
-			CrazyCalculatorMain.sShots.linkListBlocks[dispInt++].setText("/");
+			CrazyCalculator.sShots.linkListBlocks[dispInt++].setText("/");
 		if(input.equals("("))
-			CrazyCalculatorMain.sShots.linkListBlocks[dispInt++].setText("(");
+			CrazyCalculator.sShots.linkListBlocks[dispInt++].setText("(");
 		if(input.equals(")"))
-			CrazyCalculatorMain.sShots.linkListBlocks[dispInt++].setText(")");		
+			CrazyCalculator.sShots.linkListBlocks[dispInt++].setText(")");		
 	}
 		
 }

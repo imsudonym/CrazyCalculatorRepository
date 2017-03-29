@@ -10,20 +10,20 @@ public class Queue{
 	public void enqueue(String input){
 				
 		displayQueue(input);
-		CrazyCalculatorMain.makeThreadSleep();		
+		CrazyCalculator.makeThreadSleep();		
 		array.add(input);
 	}
 	
 	public String dequeue(){
 
 		if(temp < 20)
-			CrazyCalculatorMain.sShots.queueBlocks[temp++].setText("");
+			CrazyCalculator.sShots.queueBlocks[temp++].setText("");
 		
 		if(temp == dispInt){
 			temp = 0; dispInt = 0;			
 		}			
 		
-		CrazyCalculatorMain.makeThreadSleep();			
+		CrazyCalculator.makeThreadSleep();			
 		return array.remove();
 	}
 	
@@ -38,17 +38,17 @@ public class Queue{
 	private void displayQueue(String input){
 		
 		if(input.equals("+"))
-			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText("+");
+			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("+");
 		if(input.equals("-"))
-			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText("-");
+			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("-");
 		if(input.equals("*"))
-			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText("x");
+			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("x");
 		if(input.equals("/"))
-			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText("/");
+			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("/");
 		if(input.equals("("))
-			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText("(");
+			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("(");
 		if(input.equals(")"))
-			CrazyCalculatorMain.sShots.queueBlocks[dispInt++].setText(")");		
+			CrazyCalculator.sShots.queueBlocks[dispInt++].setText(")");		
 	}
 	
 }
