@@ -30,7 +30,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	private static Stack postfixStack = new Stack();
 	public static ArrayList<String> postfix = new ArrayList<String>();		
 		
-	private static String character = "", parsed = "", postfixStr = "", stackContents = "";
+	private static String character = "", parsed = "", commitStr = "", stackContents = "";
 	
 	
 	public CrazyCalculator(){
@@ -197,12 +197,12 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		token = userInput.split(" ");							
 		
 		if(infixIsValid()){
-			
+			System.out.println("Converting Infix to Postfix...");
 			System.out.println("Read\t\tParsed\t\t\tPostfix\t\t\tStack");
 
 			for(int i = 0; i < token.length; i++)
 			{		
-					//System.out.println("token[1]: " + token[1]);
+
 					character = token[i];
 					parsed += token[i];					
 					
@@ -221,14 +221,14 @@ public class CrazyCalculator extends JFrame implements Runnable{
 						{
 							String data = "";
 							data = opStack.pop();							
-							makeThreadSleep();
+							//makeThreadSleep();
 							
 							if(!data.equals("(")){									
 								postfix.add(data);										
 								postfixUpdate(data);
 								
 								stackContents = stackContents.substring(0, stackContents.length()-1);
-								postfixStr += data;
+								commitStr += data;
 								
 								makeThreadSleep();
 								
@@ -278,12 +278,11 @@ public class CrazyCalculator extends JFrame implements Runnable{
 										postfixUpdate(data);
 									
 										stackContents = stackContents.substring(0, stackContents.length()-1);
-										postfixStr += data;
+										commitStr += data;
 										
 										makeThreadSleep();
 										break;
 									}
-									makeThreadSleep();
 								}		
 								
 								
@@ -301,22 +300,12 @@ public class CrazyCalculator extends JFrame implements Runnable{
 						postfix.add(token[i]);
 						postfixUpdate(token[i]);
 						
-						postfixStr += token[i];
+						commitStr += token[i];
 						
 						makeThreadSleep();
 					}
-					
-					if(parsed.length() < 8)
-						System.out.println(character + "\t\t" + parsed + "\t\t\t" + postfixStr + "\t\t\t" + stackContents);
-					else{
-						if(postfixStr.length() < 8)
-							System.out.println(character + "\t\t" + parsed + "\t\t" + postfixStr + "\t\t\t" + stackContents);
-						else if(postfixStr.length() < 10)
-							System.out.println(character + "\t\t" + parsed + "\t\t" + postfixStr + "\t\t" + stackContents);
-						else
-							System.out.println(character + "\t\t" + parsed + "\t\t" + postfixStr + "\t" + stackContents);
-						System.out.println(character + "\t\t" + parsed + "\t\t" + postfixStr + "\t\t\t" + stackContents);
-					}
+
+					System.out.printf("%-10s\t%-10s\t\t%-10s\t\t%-10s\n", character, parsed, commitStr, stackContents);					
 						
 			}	// end parse
 							
@@ -331,13 +320,21 @@ public class CrazyCalculator extends JFrame implements Runnable{
 				postfixUpdate(data);
 				
 				stackContents = stackContents.substring(0, stackContents.length()-1);
-				postfixStr += data;
+				commitStr += data;
 				
-				System.out.println(character + "\t\t" + parsed + "\t\t" + postfixStr + "\t\t" + stackContents);
+				System.out.printf("%-10s\t%-10s\t\t%-10s\t\t%-10s\n", character, parsed, commitStr, stackContents);		
 				
 				makeThreadSleep();
 			}										
 							
+			System.out.println("Postfix: " + commitStr + "\n");
+			System.out.println("Evaluating postfix...\n");
+			System.out.println("Character\tParsed\t\t\tEvaluate\t\tStack");
+			character = "";
+			parsed = "";
+			commitStr = "";
+			stackContents = "";
+			
 			evaluatePostfix(postfix);
 			
 		}else{
@@ -378,37 +375,61 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	
 	public static void evaluatePostfix(ArrayList<String> postfix){			
 
-			String value;
+			String answer;
 			int ctr = 1;
 			
-			String data = postfix.get(ctr++);				
+			String data = postfix.get(ctr++);
+			
+			character = data;
+			parsed += data;
+			
 			String operand1, operand2;
 			
 			while(true){
 				
 				if(isOperator(data)){					
 					operand1 = postfixStack.pop();
-					sShots.postfixEvaBlocks[Stack.var--].setText("");
+					sShots.postfixEvaBlocks[Stack.var--].setText("");										
 					
 					operand2 = postfixStack.pop();					
 					sShots.postfixEvaBlocks[Stack.var--].setText("");
 										
+					commitStr += operand2 + data + operand1;
+					stackContents = stackContents.substring(0, stackContents.length()-2);
+					
 					evaluate(data, operand1, operand2);					
 					
-				}else{					
+				}else{
+															
 					postfixStack.push(data);			
-					
+										
+					commitStr = "";
+					stackContents += data;
 				}
 									
 				if(ctr == postfix.size())
 					break;
 				
-				data = postfix.get(ctr++);				
+				System.out.printf("%-10s\t%-10s\t\t%-10s\t\t%-10s\n", character, parsed, commitStr, stackContents);		
+				
+				data = postfix.get(ctr++);
+				
+				character = data;
+				parsed += data;
+				
 			}		
 			
-			value = postfixStack.pop();
+			answer = postfixStack.pop();
+						
 			sShots.postfixEvaBlocks[Stack.var--].setText("");
-			output.setText(value + " ");
+			stackContents = stackContents.substring(0, stackContents.length()-1);
+			System.out.printf("%-10s\t%-10s\t\t%-10s\t\t%-10s\n", character, parsed, commitStr, stackContents);	
+			System.out.printf("Answer: " + answer);	
+			
+			if(answer.equals("Infinity") || answer.equals("NaN"))
+				output.setText("Math Error ");
+			else
+				output.setText(answer + " ");
 		}
 
 	private static void evaluate(String data, String operand1, String operand2){				
@@ -425,6 +446,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			value = Double.parseDouble(operand2) / Double.parseDouble(operand1);
 				
 		postfixStack.push(""+value);
+		stackContents += value;
 		
 	}	
 	
@@ -433,6 +455,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		boolean parenthesisHasMatch;
 		boolean noConsecutiveOp;
 		boolean operandsComplete;
+		boolean noDoubleDecimal;		
 		
 		//	ERROR TRAPPINGS before transforming to postfix
 		ArrayList<Integer> indices = new ArrayList<Integer>();
@@ -443,28 +466,32 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			}
 		}
 		
-		boolean temp = true;
-		
-		for(int k = 0; k < token.length; k++){
-			if(decPoint(token[k]) == false){
-				temp = false;
-				break;
-			}
-		}
-		
 		parenthesisHasMatch = parenthesisHasMatch(indices);		
 		noConsecutiveOp = noConsecutiveOp();
 		operandsComplete = operandsComplete();		
+		noDoubleDecimal = noDoubleDecimal();
 		
-		if(parenthesisHasMatch && noConsecutiveOp && operandsComplete && temp == true)
+		if(parenthesisHasMatch && noConsecutiveOp && operandsComplete && noDoubleDecimal == true)
 			return true;
 		return false;
 		
 	}	
-	
+
+	private boolean noDoubleDecimal(){		
+		
+		for(int k = 0; k < token.length; k++){
+			if(decPoint(token[k]) == false){
+				return false;				
+			}
+		}
+		
+		return true;
+	}
 	private boolean operandsComplete(){
-				
+					
 		if(userInput.toCharArray()[userInput.length()-1] == ' ')
+			return false;
+		else if (isOperator(""+userInput.toCharArray()[1]))
 			return false;		
 		
 		return true; 
@@ -578,7 +605,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		character = "";
 		parsed = "";
 		stackContents = "";
-		postfixStr = "";
+		commitStr = "";
 		
 		output.setForeground(Color.black);
 	}
@@ -607,6 +634,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	private void pushEquals(){
 		input.setText(userInput);
 		output.setText("");
+		output.setForeground(Color.BLACK);
 		
 		int i = postfix.size()-1;				
 		while(i >= 0){					
@@ -633,7 +661,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		character = "";
 		parsed = "";
 		stackContents = "";
-		postfixStr = "";
+		commitStr = "";
 	}
 	
 		public static void main(String args[]){
