@@ -11,7 +11,7 @@ public class Stack {
 	
 	public void push(String input){
 				
-		displayStack(input);
+		//displayStack(input);
 		queue.enqueue(input);
 	}
 	
@@ -29,9 +29,10 @@ public class Stack {
 			queue.enqueue(temp.dequeue());
 		}
 		
+		/*
 		if(s > 0)
 			CrazyCalculator.sShots.stackBlocks[--s].setText("");
-		
+		*/
 		return str;
 				
 	}
@@ -41,11 +42,11 @@ public class Stack {
 	}
 		
 	private void displayStack(String input){
-		
+		/*
 		if(input.equals("+"))
-			CrazyCalculator.sShots.stackBlocks[s++].setText("+");
+			CrazyCalculator.sShots.stackBlocks.setText("+");
 		else if(input.equals("-"))
-			CrazyCalculator.sShots.stackBlocks[s++].setText("-");			
+			CrazyCalculator.sShots.stackBlocks.setText("-");			
 		else if(input.equals("*"))
 			CrazyCalculator.sShots.stackBlocks[s++].setText("x");
 		else if(input.equals("/"))
@@ -56,7 +57,7 @@ public class Stack {
 			CrazyCalculator.sShots.stackBlocks[s++].setText(")");
 		else
 			CrazyCalculator.sShots.postfixEvaBlocks[var++].setText(input);
-		
+		*/
 	}
 	
 }

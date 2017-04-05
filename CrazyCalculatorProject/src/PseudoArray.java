@@ -22,7 +22,7 @@ public class PseudoArray {
 			list.add(newLink);
 			ctr++;
 			
-			display(value);
+			//display(value);
 			
 		}else{
 			throw new java.lang.RuntimeException("ArrayIndexOutOfBounds.");
@@ -39,8 +39,8 @@ public class PseudoArray {
 		
 		String data = list.remove(); 
 		
-		if(temp < 20)
-			CrazyCalculator.sShots.arrayBlocks[temp++].setText("");
+		/*if(temp < 20)
+			CrazyCalculator.sShots.arrayBlocks[temp++].setText("");*/
 		
 		if(temp == dispInt){
 			temp = 0;  dispInt = 0;			
@@ -55,7 +55,7 @@ public class PseudoArray {
 	}	
 	
 	private void display(String input){
-		
+		/*
 		if(input.equals("+"))
 			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("+");
 		if(input.equals("-"))
@@ -67,6 +67,6 @@ public class PseudoArray {
 		if(input.equals("("))
 			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("(");
 		if(input.equals(")"))
-			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText(")");		
+			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText(")");*/		
 	}
 }

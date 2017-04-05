@@ -9,16 +9,16 @@ public class Queue{
 	
 	public void enqueue(String input){
 				
-		displayQueue(input);
+		//displayQueue(input);
 		CrazyCalculator.makeThreadSleep();		
 		array.add(input);
 	}
 	
 	public String dequeue(){
-
+		/*
 		if(temp < 20)
 			CrazyCalculator.sShots.queueBlocks[temp++].setText("");
-		
+		*/
 		if(temp == dispInt){
 			temp = 0; dispInt = 0;			
 		}			
@@ -36,7 +36,7 @@ public class Queue{
 	}
 	
 	private void displayQueue(String input){
-		
+		/*
 		if(input.equals("+"))
 			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("+");
 		if(input.equals("-"))
@@ -48,7 +48,7 @@ public class Queue{
 		if(input.equals("("))
 			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("(");
 		if(input.equals(")"))
-			CrazyCalculator.sShots.queueBlocks[dispInt++].setText(")");		
+			CrazyCalculator.sShots.queueBlocks[dispInt++].setText(")");*/		
 	}
 	
 }

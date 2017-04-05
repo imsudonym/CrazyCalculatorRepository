@@ -1,4 +1,7 @@
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -6,110 +9,139 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class CrazyCalculator extends JFrame implements Runnable{
 	
 	private static int sleepTime = 600;
+	
 	private static String string = "  Postfix:  ";
 	public static String userInput = " ";
 	public static String[] token; 
-	public static JTextField input, output;
+	private static String character = "", parsed = "", commitStr = "", stackContents = "";
+	
+	public static JTextField io;
+	private static JTextArea postfixEvaBlocks;
+	
+	private static JScrollPane pScroll;
 	private static JPanel numbersPane, operationsPane;	
 	
-	//Buttons
-	public static JButton[] numPad = new JButton[12];	
-	public static JButton[] opPad = new JButton[8];
+	private static JLabel postfixLabel = new JLabel("  Postfix:");
+	public static JLabel[] numPad = new JLabel[12];	
+	public static JLabel[] opPad = new JLabel[8];
 	
 	public static final String[] string1 = {"0", ".", "DEL"}; 
 	public static String[] string2 = {"(", ")", "*", "/", "+", "-", "AC", "="};	
 	
 	
-	public static CrazyGUI sShots = new CrazyGUI();		
+	public static CrazyGUI sShots = new CrazyGUI();
+	public static CrazyGUI sShots1 = new CrazyGUI();
 	public static Stack opStack = new Stack();	
 	private static Stack postfixStack = new Stack();
-	public static ArrayList<String> postfix = new ArrayList<String>();		
+	public static ArrayList<String> postfix = new ArrayList<String>();				
 		
-	private static String character = "", parsed = "", commitStr = "", stackContents = "";
-	
+	private String[] images = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "decimal", "delete",
+								"open", "close", "times", "divide", "plus", "minus", "ac", "equals"};
+	private ImageIcon[] icon = new ImageIcon[images.length];
 	
 	public CrazyCalculator(){
 		super("Crazy Calculator");
-		setLayout(null);
+		setLayout(null);		
 				
 		init();			
 		
-		add(input); add(numbersPane); add(operationsPane);
-		add(output); add(sShots);
+		add(numbersPane);
+		add(operationsPane);		
+		add(sShots);
+		add(postfixLabel);
+		add(pScroll);
+		add(sShots1);
 	}
 	
 	private void init(){
 		
-		input = new JTextField(" input");
-		input.setEditable(false);
-		input.setOpaque(true);
-		input.setSize(320, 40);
-		input.setLocation(20,62);
-		input.setBackground(Color.WHITE);		
-		input.setFont(new Font("Consolas", Font.BOLD, 14));
+		io = new JTextField();		
+		io.setFont(new Font("Consolas", Font.BOLD, 36));
+		io.setHorizontalAlignment(JTextField.RIGHT);
 		
-		JScrollBar scrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
-		scrollBar.setSize(320,17); 
-		scrollBar.setLocation(20,103);
-		BoundedRangeModel brm = input.getHorizontalVisibility();
-	    scrollBar.setModel(brm);
-	    add(scrollBar);
+		JScrollPane ioScroll = new JScrollPane(io);
+		ioScroll.setBounds(850, 200, 400, 60);
+		ioScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		ioScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		add(ioScroll);
 		
-		output = new JTextField("output ");
-		output.setEditable(false);
-		output.setOpaque(true);
-		output.setBackground(Color.WHITE);		
-		output.setSize(320,40); 
-		output.setLocation(20,20);
-		output.setHorizontalAlignment(JLabel.RIGHT);
-		output.setFont(new Font("Consolas", Font.BOLD, 14));
-		
+		for(int i = 0; i < images.length; i++){
+			icon[i] = new ImageIcon(getClass().getResource("crazy_images/" + images[i] + ".png"));
+		}
 		
 		numbersPane = new JPanel();
-		numbersPane.setSize(170,200);
-		numbersPane.setLocation(20,140);
-		numbersPane.setLayout(new GridLayout(4,3, 1, 1));
+		numbersPane.setBounds(850, 300, 220, 300);		
+		numbersPane.setLayout(new GridLayout(4, 3, 1, 1));
 		
 		Handler handler = new Handler();
 		
 		for(int i = 8; i >= 0; i--){
-			numPad[i] = new JButton("" + (i+1));	
-			numPad[i].setFont(new Font("Consolas", Font.BOLD, 12));
-			numPad[i].addActionListener(handler);
+			numPad[i] = new JLabel(icon[i]);	
+			numPad[i].addMouseListener(handler);
 			numbersPane.add(numPad[i]);
 		}
 		
 		int j = 9;
-		for(int i = 0; i < string1.length; i++){
-			numPad[j] = new JButton(string1[i]);
+		for(int i = 9; i < 12; i++){
+			numPad[j] = new JLabel(icon[i]);
 			numPad[j].setFont(new Font("Consolas", Font.BOLD, 12));
-			numPad[j].addActionListener(handler);
+			numPad[j].addMouseListener(handler);
 			numbersPane.add(numPad[j++]);
 		}
 		
 		operationsPane = new JPanel();
-		operationsPane.setSize(140,200);
-		operationsPane.setLocation(200,140);
+		operationsPane.setBounds(1090, 300, 150, 300);
 		operationsPane.setLayout(new GridLayout(4, 2, 1, 1));
-		for(int i = 0; i < string2.length; i++){
-			opPad[i] = new JButton(string2[i]);
-			opPad[i].setFont(new Font("Consolas", Font.BOLD, 12));
-			opPad[i].addActionListener(handler);
-			operationsPane.add(opPad[i]);
+		
+		int k = 0;
+		for(int i = 12; i < images.length; i++){
+			opPad[k] = new JLabel(icon[i]);
+			opPad[k].setFont(new Font("Consolas", Font.BOLD, 12));
+			opPad[k].addMouseListener(handler);
+			operationsPane.add(opPad[k++]);
 		}
 		
-		sShots.setSize(825,410);
-		sShots.setLocation(381,0);
+		
+		sShots.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(),
+				"Conversion of Infix to Postfix", TitledBorder.LEFT, TitledBorder.TOP, new Font("Consolas", Font.BOLD, 14)));
+		
+		postfixLabel.setFont(new Font("Consolas", Font.BOLD, 14));
+		postfixEvaBlocks = new JTextArea();
+		postfixEvaBlocks.setFont(new Font("Consolas", Font.BOLD, 14));
+		pScroll = new JScrollPane(postfixEvaBlocks);
+		
+		
+		sShots1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(),
+				"Postfix Evaluation", TitledBorder.LEFT, TitledBorder.TOP, new Font("Consolas", Font.BOLD, 14)));
+		
+		sShots.setBounds(40, 150, 700, 220);
+		postfixLabel.setBounds(60, 390, 100, 15);
+		pScroll.setBounds(160, 380, 430, 35);
+		sShots1.setBounds(40, 440, 700, 220);		
+
 	}
 	
 	
-	public class Handler implements ActionListener{
-		public void actionPerformed(ActionEvent e){
+	public class Handler extends MouseAdapter{
+		
+		public void mouseEntered(MouseEvent e){
+			Object source = e.getSource();
+						
+		}
+		
+		public void mouseExited(MouseEvent e){
+			Object source = e.getSource();
+			
+		}
+		
+		public void mouseClicked(MouseEvent e){		
 			Object source = e.getSource();
 			
 			if(source == numPad[11])		//	'del' button click
@@ -168,14 +200,12 @@ public class CrazyCalculator extends JFrame implements Runnable{
 				//	any operation click
 				for(int i = 2; i < opPad.length-1; i++){
 										
-					if(source == opPad[i]){
-						
-						if(userInput.toCharArray()[userInput.length()-1] == '.')
-							userInput += "0";
-						
+					if(source == opPad[i]){										
 						
 						if(userInput.length()>0){
-							if(userInput.toCharArray()[userInput.length()-1] == ' ')
+							if(userInput.toCharArray()[userInput.length()-1] == '.')
+								userInput += "0";								
+							else if(userInput.toCharArray()[userInput.length()-1] == ' ')
 								userInput += string2[i] + " ";
 							else
 								userInput += " " + string2[i] + " ";	
@@ -184,8 +214,8 @@ public class CrazyCalculator extends JFrame implements Runnable{
 					}
 				}
 				
-				input.setText(userInput);	
-				output.setText("");				
+				io.setText(userInput);	
+				//output.setText("");				
 			}
 			
 		}
@@ -339,8 +369,8 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			
 		}else{
 			
-			output.setForeground(Color.RED);
-			output.setText("Syntax error ");					
+			JOptionPane.showMessageDialog(null, "Syntax error!");
+			//o.setText("Syntax error ");					
 		}			
 		
 		Thread t = new Thread();
@@ -389,10 +419,10 @@ public class CrazyCalculator extends JFrame implements Runnable{
 				
 				if(isOperator(data)){					
 					operand1 = postfixStack.pop();
-					sShots.postfixEvaBlocks[Stack.var--].setText("");										
+					//sShots.postfixEvaBlocks[Stack.var--].setText("");										
 					
 					operand2 = postfixStack.pop();					
-					sShots.postfixEvaBlocks[Stack.var--].setText("");
+					//sShots.postfixEvaBlocks[Stack.var--].setText("");
 										
 					commitStr += operand2 + data + operand1;
 					stackContents = stackContents.substring(0, stackContents.length()-2);
@@ -421,15 +451,15 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			
 			answer = postfixStack.pop();
 						
-			sShots.postfixEvaBlocks[Stack.var--].setText("");
+			//sShots.postfixEvaBlocks[Stack.var--].setText("");
 			stackContents = stackContents.substring(0, stackContents.length()-1);
 			System.out.printf("%-10s\t%-10s\t\t%-10s\t\t%-10s\n", character, parsed, commitStr, stackContents);	
 			System.out.printf("Answer: " + answer);	
 			
 			if(answer.equals("Infinity") || answer.equals("NaN"))
-				output.setText("Math Error ");
+				io.setText("Math Error ");
 			else
-				output.setText(answer + " ");
+				io.setText(answer + " ");
 		}
 
 	private static void evaluate(String data, String operand1, String operand2){				
@@ -571,13 +601,13 @@ public class CrazyCalculator extends JFrame implements Runnable{
 
 	private void postfixUpdate(String str){
 		string += str;		
-		sShots.postfixLabel.setText(string);
+		//sShots.postfixLabel.setText(string);
 	}
 	
 	private void pushAC(){
 		userInput = " ";								
-		input.setText(userInput);
-		output.setText("");
+		io.setText(userInput);
+		//output.setText("");
 		
 		int i = postfix.size()-1;
 		
@@ -587,8 +617,8 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		}				
 		
 		string = "  Postfix:  ";
-		sShots.postfixLabel.setText(string);
-		sShots.postfixEvaBlocks[0].setText("");
+		//sShots.postfixLabel.setText(string);
+		//sShots.postfixEvaBlocks[0].setText("");
 		Stack.s = 0;	
 		Stack.var = 0;
 		
@@ -607,7 +637,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		stackContents = "";
 		commitStr = "";
 		
-		output.setForeground(Color.black);
+		//output.setForeground(Color.black);
 	}
 	
 	private void pushDel(){
@@ -628,13 +658,13 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			}
 		}								
 					
-		input.setText(userInput);
+		io.setText(userInput);
 	}
 	
 	private void pushEquals(){
-		input.setText(userInput);
-		output.setText("");
-		output.setForeground(Color.BLACK);
+		io.setText(userInput);
+		//output.setText("");
+		//output.setForeground(Color.BLACK);
 		
 		int i = postfix.size()-1;				
 		while(i >= 0){					
@@ -643,7 +673,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		}				
 		
 		string = "  Postfix:  ";
-		sShots.postfixLabel.setText(string);
+		//sShots.postfixLabel.setText(string);
 		
 		Stack.s = 0;	
 		Stack.var = 0;

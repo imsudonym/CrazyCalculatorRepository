@@ -23,7 +23,7 @@ public class LinkedList{
 			last = last.next;
 		}			
 		
-		display(newLink.getValue());
+		//display(newLink.getValue());
 	}
 	
 	public Link get(int index){		
@@ -46,9 +46,9 @@ public class LinkedList{
 	
 	public String remove(){
 		Link temp = null;
-		
+		/*
 		if(ctr < 20)
-			CrazyCalculator.sShots.linkListBlocks[ctr++].setText("");
+			CrazyCalculator.sShots.linkListBlocks[ctr++].setText("");*/
 		
 		if(ctr == dispInt){
 			ctr = 0; dispInt = 0;
@@ -67,7 +67,7 @@ public class LinkedList{
 	}
 	
 	private void display(String input){
-		
+		/*
 		if(input.equals("+"))
 			CrazyCalculator.sShots.linkListBlocks[dispInt++].setText("+");
 		if(input.equals("-"))
@@ -79,7 +79,7 @@ public class LinkedList{
 		if(input.equals("("))
 			CrazyCalculator.sShots.linkListBlocks[dispInt++].setText("(");
 		if(input.equals(")"))
-			CrazyCalculator.sShots.linkListBlocks[dispInt++].setText(")");		
+			CrazyCalculator.sShots.linkListBlocks[dispInt++].setText(")");*/		
 	}
 		
 }
