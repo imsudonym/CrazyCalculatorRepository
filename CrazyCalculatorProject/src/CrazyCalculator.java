@@ -44,7 +44,11 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		
 	private String[] images = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "decimal", "delete",
 								"open", "close", "times", "divide", "plus", "minus", "ac", "equals"};
+	private String[] images_hover = {"one_hover", "two_hover", "three_hover", "four_hover", "five_hover", "six_hover", "seven_hover", 
+			"eight_hover", "nine_hover", "zero_hover", "decimal_hover", "delete_hover", "open_hover", "close_hover", "times_hover", "divide_hover", "plus_hover", "minus_hover", "ac_hover", "equals_hover"};
+	
 	private ImageIcon[] icon = new ImageIcon[images.length];
+	private ImageIcon[] icon_hover = new ImageIcon[images_hover.length];
 	
 	public CrazyCalculator(){
 		super("Crazy Calculator");
@@ -76,6 +80,10 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			icon[i] = new ImageIcon(getClass().getResource("crazy_images/" + images[i] + ".png"));
 		}
 		
+		for(int i = 0; i < images_hover.length; i++){
+			icon_hover[i] = new ImageIcon(getClass().getResource("crazy_images/" + images_hover[i] + ".png"));
+		}
+		
 		numbersPane = new JPanel();
 		numbersPane.setBounds(850, 300, 220, 300);		
 		numbersPane.setLayout(new GridLayout(4, 3, 1, 1));
@@ -87,13 +95,12 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			numPad[i].addMouseListener(handler);
 			numbersPane.add(numPad[i]);
 		}
-		
-		int j = 9;
+				
 		for(int i = 9; i < 12; i++){
-			numPad[j] = new JLabel(icon[i]);
-			numPad[j].setFont(new Font("Consolas", Font.BOLD, 12));
-			numPad[j].addMouseListener(handler);
-			numbersPane.add(numPad[j++]);
+			numPad[i] = new JLabel(icon[i]);
+			numPad[i].setFont(new Font("Consolas", Font.BOLD, 12));
+			numPad[i].addMouseListener(handler);
+			numbersPane.add(numPad[i]);
 		}
 		
 		operationsPane = new JPanel();
@@ -134,11 +141,42 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		public void mouseEntered(MouseEvent e){
 			Object source = e.getSource();
 						
+			for(int i = 0; i < 12; i++){
+				if(source == numPad[i]){
+					numPad[i].setIcon(icon_hover[i]);
+					break;
+				}
+			}
+			
+			int k = 0;
+			for(int i = 12; i < images.length; i++){
+				if(source == opPad[k]){
+					opPad[k].setIcon(icon_hover[i]);
+					break;
+				}					
+				k++;
+			}
 		}
 		
 		public void mouseExited(MouseEvent e){
 			Object source = e.getSource();
 			
+			for(int i = 0; i < 12; i++){
+				if(source == numPad[i]){
+					numPad[i].setIcon(icon[i]);
+					break;
+				}
+									
+			}
+			
+			int k = 0;
+			for(int i = 12; i < images.length; i++){
+				if(source == opPad[k]){
+					opPad[k].setIcon(icon[i]);
+					break;
+				}					
+				k++;
+			}
 		}
 		
 		public void mouseClicked(MouseEvent e){		
