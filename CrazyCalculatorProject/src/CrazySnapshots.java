@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 
-public class CrazyGUI extends JPanel{
+public class CrazySnapshots extends JPanel{
 		
 	private String s;		
 	
@@ -24,7 +24,7 @@ public class CrazyGUI extends JPanel{
 	private JPanel[] panels = new JPanel[4];
 	private JPanel panel = new JPanel();	
 	
-	public CrazyGUI(){
+	public CrazySnapshots(){
 
 		setLayout(null);
 		
@@ -41,7 +41,7 @@ public class CrazyGUI extends JPanel{
 		queueBlocks.setFont(new Font("Consolas", Font.BOLD, 20));
 		queueBlocks.setEditable(false);
 		qScroll = new JScrollPane(queueBlocks);		
-		qScroll.setBounds(30, 0, 400,50);
+		qScroll.setBounds(30, 0, 500, 90);
 		qScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		qScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
@@ -49,7 +49,7 @@ public class CrazyGUI extends JPanel{
 		stackBlocks.setFont(new Font("Consolas", Font.BOLD, 20));	
 		stackBlocks.setEditable(false);
 		sScroll = new JScrollPane(stackBlocks);
-		sScroll.setBounds(30, 0, 400,50);
+		sScroll.setBounds(30, 0, 500, 90);
 		sScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		sScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
@@ -57,7 +57,7 @@ public class CrazyGUI extends JPanel{
 		arrayBlocks.setFont(new Font("Consolas", Font.BOLD, 20));
 		arrayBlocks.setEditable(false);
 		aScroll = new JScrollPane(arrayBlocks);
-		aScroll.setBounds(30, 0, 400,50);
+		aScroll.setBounds(30, 0, 500, 90);
 		aScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		aScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
@@ -65,7 +65,7 @@ public class CrazyGUI extends JPanel{
 		linkListBlocks.setFont(new Font("Consolas", Font.BOLD, 20));
 		linkListBlocks.setEditable(false);
 		lScroll = new JScrollPane(linkListBlocks);		
-		lScroll.setBounds(30, 0, 400,50);
+		lScroll.setBounds(30, 0, 500, 90);
 		lScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		lScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
@@ -75,17 +75,17 @@ public class CrazyGUI extends JPanel{
 		panels[3].add(lScroll);
 		
 		// labels for queue, stack, postfix, final answer			
-		queueLabel.setFont(new Font("Consolas", Font.BOLD, 14));		
-		stackLabel.setFont(new Font("Consolas", Font.BOLD, 14));		
-		arrayLabel.setFont(new Font("Consolas", Font.BOLD, 14));
-		linkListLabel.setFont(new Font("Consolas", Font.BOLD, 14));				
+		queueLabel.setFont(new Font("Consolas", Font.BOLD, 20));		
+		stackLabel.setFont(new Font("Consolas", Font.BOLD, 20));		
+		arrayLabel.setFont(new Font("Consolas", Font.BOLD, 20));
+		linkListLabel.setFont(new Font("Consolas", Font.BOLD, 20));				
 		
-		stackLabel.setBounds(20, 30, 100, 40);
-		queueLabel.setBounds(20, 70, 100, 40);		
-		arrayLabel.setBounds(20, 110, 120, 40);
-		linkListLabel.setBounds(20, 150, 120, 40);				
+		stackLabel.setBounds(10, 50, 110, 40);
+		queueLabel.setBounds(10, 95, 110, 40);		
+		arrayLabel.setBounds(5, 145, 180, 40);
+		linkListLabel.setBounds(5, 190, 180, 40);				
 		
-		panel.setBounds(151,35,500, 150);
+		panel.setBounds(151, 50, 600, 180);
 		
 		add(queueLabel);
 		add(stackLabel);

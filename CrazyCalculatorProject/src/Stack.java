@@ -1,6 +1,7 @@
 
 public class Stack {
-	
+
+	private static String stringTemp = "";
 	private Queue queue = new Queue();
 	public static int s = 0;
 	public static int var = 0;
@@ -11,7 +12,7 @@ public class Stack {
 	
 	public void push(String input){
 				
-		//displayStack(input);
+		displayStack(input);
 		queue.enqueue(input);
 	}
 	
@@ -42,22 +43,25 @@ public class Stack {
 	}
 		
 	private void displayStack(String input){
-		/*
+		
+		
 		if(input.equals("+"))
-			CrazyCalculator.sShots.stackBlocks.setText("+");
+			stringTemp += "+";
 		else if(input.equals("-"))
-			CrazyCalculator.sShots.stackBlocks.setText("-");			
+			stringTemp += "-";			
 		else if(input.equals("*"))
-			CrazyCalculator.sShots.stackBlocks[s++].setText("x");
+			stringTemp += "x";
 		else if(input.equals("/"))
-			CrazyCalculator.sShots.stackBlocks[s++].setText("/");
+			stringTemp += "/";
 		else if(input.equals("("))
-			CrazyCalculator.sShots.stackBlocks[s++].setText("(");
+			stringTemp += "(";
 		else if(input.equals(")"))
-			CrazyCalculator.sShots.stackBlocks[s++].setText(")");
+			stringTemp += ")";
 		else
-			CrazyCalculator.sShots.postfixEvaBlocks[var++].setText(input);
-		*/
+			stringTemp += input;
+		
+		CrazySnapshots.stackBlocks.setText(stringTemp);
+		
 	}
 	
 }

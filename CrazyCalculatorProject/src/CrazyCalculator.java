@@ -3,32 +3,39 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class CrazyCalculator extends JFrame implements Runnable{
 	
-	private static int sleepTime = 600;
+	private static boolean toggleOperation = false;
+	private static int sleepTime = 500;
 	
-	private static String string = "  Postfix:  ";
-	public static String userInput = " ";
+	private static String string = "  Postfix:  ";	
+	public static String userInput = "";
 	public static String[] token; 
 	private static String character = "", parsed = "", commitStr = "", stackContents = "";
 	
-	public static JTextField io;
-	private static JTextArea postfixEvaBlocks;
-	
 	private static JScrollPane pScroll;
-	private static JPanel numbersPane, operationsPane;	
+	private static JTextArea postfixEvaBlocks;
+	public static JTextArea io;	
+	private static JPanel numbersPane, operationsPane;
+	private static JPanel calcPanel;
+	
 	
 	private static JLabel postfixLabel = new JLabel("  Postfix:");
+	private static final JLabel title1 = new JLabel("Convert Infix to Postfix");
+	private static final JLabel title2 = new JLabel("Evaluate Postfix");
 	public static JLabel[] numPad = new JLabel[12];	
 	public static JLabel[] opPad = new JLabel[8];
 	
@@ -36,10 +43,11 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	public static String[] string2 = {"(", ")", "*", "/", "+", "-", "AC", "="};	
 	
 	
-	public static CrazyGUI sShots = new CrazyGUI();
-	public static CrazyGUI sShots1 = new CrazyGUI();
+	public static CrazySnapshots sShots = new CrazySnapshots();
+	public static CrazySnapshots sShots1 = new CrazySnapshots();
 	public static Stack opStack = new Stack();	
-	private static Stack postfixStack = new Stack();
+	public static Stack postfixStack = new Stack();
+	
 	public static ArrayList<String> postfix = new ArrayList<String>();				
 		
 	private String[] images = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "zero", "decimal", "delete",
@@ -52,29 +60,45 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	
 	public CrazyCalculator(){
 		super("Crazy Calculator");
-		setLayout(null);		
+		setLayout(null);
+		this.getContentPane().setBackground(Color.DARK_GRAY);
 				
 		init();			
 		
-		add(numbersPane);
-		add(operationsPane);		
+		add(calcPanel);
+		/*add(pScroll);
+		/*
 		add(sShots);
 		add(postfixLabel);
-		add(pScroll);
-		add(sShots1);
+		
+		add(sShots1);*/
 	}
 	
 	private void init(){
 		
-		io = new JTextField();		
+		calcPanel = new JPanel();
+		calcPanel.setLayout(null);
+		calcPanel.setOpaque(true);
+		calcPanel.setBackground(Color.BLACK);
+		calcPanel.setBounds(0, 0, 440, 460);
+		
+		io = new JTextArea();		
 		io.setFont(new Font("Consolas", Font.BOLD, 36));
-		io.setHorizontalAlignment(JTextField.RIGHT);
+		//io.setTextAlignment(JTextArea.R);
+		io.addKeyListener(new KeyAdapter(){
+			public void keyTyped(KeyEvent e){
+				char c = e.getKeyChar();
+				if(((c < 40 ) || (c > 57)) && (c != KeyEvent.VK_BACK_SPACE)){
+					e.consume();
+				}
+			}
+		});
 		
 		JScrollPane ioScroll = new JScrollPane(io);
-		ioScroll.setBounds(850, 200, 400, 60);
+		ioScroll.setBounds(20, 50, 400, 60);
 		ioScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		ioScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		add(ioScroll);
+		calcPanel.add(ioScroll);
 		
 		for(int i = 0; i < images.length; i++){
 			icon[i] = new ImageIcon(getClass().getResource("crazy_images/" + images[i] + ".png"));
@@ -85,7 +109,8 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		}
 		
 		numbersPane = new JPanel();
-		numbersPane.setBounds(850, 300, 220, 300);		
+		numbersPane.setBackground(Color.black);
+		numbersPane.setBounds(20, 140, 220, 300);		
 		numbersPane.setLayout(new GridLayout(4, 3, 1, 1));
 		
 		Handler handler = new Handler();
@@ -104,7 +129,8 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		}
 		
 		operationsPane = new JPanel();
-		operationsPane.setBounds(1090, 300, 150, 300);
+		operationsPane.setBackground(Color.black);
+		operationsPane.setBounds(260, 140, 160, 300);
 		operationsPane.setLayout(new GridLayout(4, 2, 1, 1));
 		
 		int k = 0;
@@ -115,23 +141,24 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			operationsPane.add(opPad[k++]);
 		}
 		
+				
+		title1.setFont(new Font("Consolas", Font.BOLD, 16));
+		title1.setBounds(290, 40, 250, 20);
+		title2.setFont(new Font("Consolas", Font.BOLD, 16));
+		title2.setBounds(350, 380, 250, 20);
 		
-		sShots.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(),
-				"Conversion of Infix to Postfix", TitledBorder.LEFT, TitledBorder.TOP, new Font("Consolas", Font.BOLD, 14)));
-		
-		postfixLabel.setFont(new Font("Consolas", Font.BOLD, 14));
+		postfixLabel.setFont(new Font("Consolas", Font.BOLD, 16));
 		postfixEvaBlocks = new JTextArea();
 		postfixEvaBlocks.setFont(new Font("Consolas", Font.BOLD, 14));
 		pScroll = new JScrollPane(postfixEvaBlocks);
+						
+		sShots.setBounds(30, 30, 750, 300);
+		postfixLabel.setBounds(150, 290, 100, 20);
+		pScroll.setBounds(250, 280, 430, 35);
+		sShots1.setBounds(30, 360, 750, 300);
 		
-		
-		sShots1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createRaisedBevelBorder(),
-				"Postfix Evaluation", TitledBorder.LEFT, TitledBorder.TOP, new Font("Consolas", Font.BOLD, 14)));
-		
-		sShots.setBounds(40, 150, 700, 220);
-		postfixLabel.setBounds(60, 390, 100, 15);
-		pScroll.setBounds(160, 380, 430, 35);
-		sShots1.setBounds(40, 440, 700, 220);		
+		calcPanel.add(numbersPane);
+		calcPanel.add(operationsPane);
 
 	}
 	
@@ -192,23 +219,27 @@ public class CrazyCalculator extends JFrame implements Runnable{
 												
 			}			
 			else{				
-				
 				// numbers 1-9
-				for(int j = 0; j < 9; j++){
-					if(source == numPad[j]){
-						if(isOperator(""+userInput.toCharArray()[userInput.length()-1]))
-							userInput += " " + (j + 1);
-						else
-							userInput += "" + (j + 1);
-					}
-												
+				for(int j = 0; j < 9; j++)
+				{
+					if(source == numPad[j])
+					{
+						userInput += (j + 1);
+						
+						toggleOperation = false;
+						break;
+					}																
 				}
 				
 				//	number '0' click
-				if(source == numPad[9])
-					userInput += "0";												
+				if(source == numPad[9]){
+					
+					userInput += "0";
+					
+					toggleOperation = false;
+				}
 				
-				//	decimal point click
+				//	decimal point 
 				if(source == numPad[10]){				
 					if(userInput.length() > 0){
 						if(Character.isDigit(userInput.toCharArray()[userInput.length()-1]))
@@ -217,67 +248,97 @@ public class CrazyCalculator extends JFrame implements Runnable{
 							userInput += "0.";
 					}else 						
 						userInput += "0.";
-				}				
-				
-				//	'(' click
+					
+					toggleOperation = false;
+				}								
+				//	open parenthesis
 				if(source == opPad[0]){
-					if(userInput.toCharArray()[userInput.length()-1] == ' ')
-						userInput += string2[0] + " ";
-					else
-						userInput += " " + string2[0] + " ";
-				}													
-				
-				//	')' click
-				if(source == opPad[1]){
-					if(userInput.toCharArray()[userInput.length()-1] == ' ')
-						userInput += string2[1] + " ";
-					else
-						userInput += " " + string2[1];
-				}					
-				
-				//	any operation click
-				for(int i = 2; i < opPad.length-1; i++){
 										
-					if(source == opPad[i]){										
-						
-						if(userInput.length()>0){
-							if(userInput.toCharArray()[userInput.length()-1] == '.')
-								userInput += "0";								
-							else if(userInput.toCharArray()[userInput.length()-1] == ' ')
-								userInput += string2[i] + " ";
-							else
-								userInput += " " + string2[i] + " ";	
-						}else 
-							userInput += " " + string2[i] + " ";					
+					userInput += string2[0];
+					
+					toggleOperation = false;
+				}																	
+				//	close parenthesis
+				if(source == opPad[1]){					
+					
+					userInput += string2[1];
+					
+					toggleOperation = false;
+				}						
+				//	toggleOperation indicates whether an operation button has been previously pressed
+				if(toggleOperation == false){
+
+					//	any operation click
+					for(int i = 2; i < opPad.length-1; i++){
+											
+						if(source == opPad[i]){		
+							
+							toggleOperation = true;
+							
+							if(userInput.length() > 0){
+								if(userInput.toCharArray()[userInput.length()-1] == '.')
+									userInput += "0";																
+								
+								userInput += string2[i];
+									
+							}							
+							break;
+						}
 					}
 				}
-				
-				io.setText(userInput);	
-				//output.setText("");				
-			}
-			
+
+				io.setText(userInput);					
+			}			
 		}
 	}
 
 	
 		public void run(){
+						
+		//	Put spaces in between operators and operands
+		String read = "";
+		for(int i = 0; i < userInput.length(); i++){						
+			
+			if(isOperator("" + userInput.toCharArray()[i])){				
+
+				if(isOperator("" + userInput.toCharArray()[i-1]) || userInput.toCharArray()[i-1] == '(' || userInput.toCharArray()[i-1] == ')')
+					read += userInput.toCharArray()[i] + " ";	
+				else 
+					read += " " + userInput.toCharArray()[i] + " ";
+				
+			}else if(userInput.toCharArray()[i] == '(' || userInput.toCharArray()[i] == ')'){
+				if(isOperator("" + userInput.toCharArray()[i-1]) || userInput.toCharArray()[i-1] == '(' || userInput.toCharArray()[i-1] == ')')
+					read += userInput.toCharArray()[i] + " ";
+				else 
+					read += " " + userInput.toCharArray()[i] + " ";
+			}				
+			else
+				read += userInput.toCharArray()[i];
+		}		
 		
-		token = userInput.split(" ");							
+		//	Split operators and operands
+		token = read.split(" ");	
+		
+		for(int i  = 0; i < token.length; i++){
+			System.out.println("token: " + token[i]);
+		}
 		
 		if(infixIsValid()){
-			System.out.println("Converting Infix to Postfix...");
-			System.out.println("Read\t\tParsed\t\t\tPostfix\t\t\tStack");
+			
+			io.setEditable(false);
+			
+			System.out.println("\nConverting Infix to Postfix...");
+			System.out.println("Read\t\t\tParsed\t\t\tPostfix\t\t\tStack");
 
 			for(int i = 0; i < token.length; i++)
 			{		
 
-					character = token[i];
+					character = token[i];	
 					parsed += token[i];					
 					
 					if(token[i].equals("(")){							
 						
-						opStack.push(token[i]);	
-						
+						opStack.push(token[i]);							
 						stackContents += token[i];
 						
 						makeThreadSleep();
@@ -289,18 +350,19 @@ public class CrazyCalculator extends JFrame implements Runnable{
 						{
 							String data = "";
 							data = opStack.pop();							
-							//makeThreadSleep();
 							
 							if(!data.equals("(")){									
 								postfix.add(data);										
 								postfixUpdate(data);
 								
+								//	@right most character of stackContents removed every loop 
 								stackContents = stackContents.substring(0, stackContents.length()-1);
 								commitStr += data;
 								
 								makeThreadSleep();
 								
 							}else{
+								//	@right most character of stackContents removed every loop
 								stackContents = stackContents.substring(0, stackContents.length()-1);
 								break;							
 							}
@@ -373,7 +435,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 						makeThreadSleep();
 					}
 
-					System.out.printf("%-10s\t%-10s\t\t%-10s\t\t%-10s\n", character, parsed, commitStr, stackContents);					
+					System.out.printf("%-15s\t%-15s\t\t%-15s\t\t%-15s\n", character, parsed, commitStr, stackContents);					
 						
 			}	// end parse
 							
@@ -390,7 +452,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 				stackContents = stackContents.substring(0, stackContents.length()-1);
 				commitStr += data;
 				
-				System.out.printf("%-10s\t%-10s\t\t%-10s\t\t%-10s\n", character, parsed, commitStr, stackContents);		
+				System.out.printf("%-15s\t%-15s\t\t%-15s\t\t%-15s\n", character, parsed, commitStr, stackContents);		
 				
 				makeThreadSleep();
 			}										
@@ -404,16 +466,18 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			stackContents = "";
 			
 			evaluatePostfix(postfix);
+			io.setEditable(true);
 			
 		}else{
 			
 			JOptionPane.showMessageDialog(null, "Syntax error!");
-			//o.setText("Syntax error ");					
+			io.setEditable(true);
 		}			
 		
 		Thread t = new Thread();
 		t.start();
 	}	
+		
 	public static void makeThreadSleep(){
 		try{
 			
@@ -443,8 +507,9 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	
 	public static void evaluatePostfix(ArrayList<String> postfix){			
 
+		
 			String answer;
-			int ctr = 1;
+			int ctr = 0;
 			
 			String data = postfix.get(ctr++);
 			
@@ -453,16 +518,14 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			
 			String operand1, operand2;
 			
-			while(true){
+			while(true){				
 				
 				if(isOperator(data)){					
-					operand1 = postfixStack.pop();
-					//sShots.postfixEvaBlocks[Stack.var--].setText("");										
+					operand1 = postfixStack.pop();								
 					
 					operand2 = postfixStack.pop();					
-					//sShots.postfixEvaBlocks[Stack.var--].setText("");
 										
-					commitStr += operand2 + data + operand1;
+					commitStr += operand2 + data + operand1;					
 					stackContents = stackContents.substring(0, stackContents.length()-2);
 					
 					evaluate(data, operand1, operand2);					
@@ -478,7 +541,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 				if(ctr == postfix.size())
 					break;
 				
-				System.out.printf("%-10s\t%-10s\t\t%-10s\t\t%-10s\n", character, parsed, commitStr, stackContents);		
+				System.out.printf("%-15s\t%-15s\t\t%-15s\t\t%-15s\n", character, parsed, commitStr, stackContents);		
 				
 				data = postfix.get(ctr++);
 				
@@ -491,13 +554,15 @@ public class CrazyCalculator extends JFrame implements Runnable{
 						
 			//sShots.postfixEvaBlocks[Stack.var--].setText("");
 			stackContents = stackContents.substring(0, stackContents.length()-1);
-			System.out.printf("%-10s\t%-10s\t\t%-10s\t\t%-10s\n", character, parsed, commitStr, stackContents);	
+			System.out.printf("%-15s\t%-15s\t\t%-15s\t\t%-15s\n", character, parsed, commitStr, stackContents);	
 			System.out.printf("Answer: " + answer);	
 			
 			if(answer.equals("Infinity") || answer.equals("NaN"))
-				io.setText("Math Error ");
+				io.setText("Math Error");
 			else
-				io.setText(answer + " ");
+				io.setText(answer);
+			
+			userInput = "";
 		}
 
 	private static void evaluate(String data, String operand1, String operand2){				
@@ -520,11 +585,6 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	
 	private boolean infixIsValid(){
 
-		boolean parenthesisHasMatch;
-		boolean noConsecutiveOp;
-		boolean operandsComplete;
-		boolean noDoubleDecimal;		
-		
 		//	ERROR TRAPPINGS before transforming to postfix
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 		
@@ -534,12 +594,15 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			}
 		}
 		
-		parenthesisHasMatch = parenthesisHasMatch(indices);		
-		noConsecutiveOp = noConsecutiveOp();
-		operandsComplete = operandsComplete();		
-		noDoubleDecimal = noDoubleDecimal();
+		boolean parenthesisHasMatch = parenthesisHasMatch(indices), noConsecutiveOp = noConsecutiveOp(), 
+				operandsComplete = operandsComplete(), noDoubleDecimal = noDoubleDecimal(), hasOpBeforeParenthesis = hasOpBeforeParenthesis();
 		
-		if(parenthesisHasMatch && noConsecutiveOp && operandsComplete && noDoubleDecimal == true)
+		System.out.println("parenthesisHasMatch: " + parenthesisHasMatch + 
+				"\nnoConsecutiveOp: " + noConsecutiveOp + "\nopearandsComplete: " + operandsComplete + 
+				"\nnoDoubleDecimal: " + noDoubleDecimal + "\nhasOpBeforeParenthesis: " + hasOpBeforeParenthesis());
+		
+		
+		if(parenthesisHasMatch(indices) && noConsecutiveOp() && operandsComplete() && noDoubleDecimal() && hasOpBeforeParenthesis())
 			return true;
 		return false;
 		
@@ -547,41 +610,32 @@ public class CrazyCalculator extends JFrame implements Runnable{
 
 	private boolean noDoubleDecimal(){		
 		
+		int ctr = 0;
+		
 		for(int k = 0; k < token.length; k++){
-			if(decPoint(token[k]) == false){
-				return false;				
-			}
+			for(int i = 0; i < token[k].length(); i++){
+				if(token[k].toCharArray()[i] == '.'){
+					ctr++;
+				}				
+			}	
+			
+			if(ctr > 1)
+				return false;
 		}
 		
 		return true;
 	}
-	private boolean operandsComplete(){
-					
-		if(userInput.toCharArray()[userInput.length()-1] == ' ')
-			return false;
-		else if (isOperator(""+userInput.toCharArray()[1]))
-			return false;		
-		
-		return true; 
-	}
 	
-	private boolean decPoint(String s){
-		int num = 0, i = 0;
-		boolean temp = true;
-		
-		while(i < s.length()){
-			if(s.charAt(i) == '.'){
-				num++;
-			}
-			
-			if(num > 1){
-				temp = false;
-				break;
-			}
-			i++;
-		}
-		return temp;
-	}
+	private boolean operandsComplete(){
+	
+		if(userInput.length() > 0){
+			if(isOperator("" + userInput.toCharArray()[0]))
+				return false;
+			else if (isOperator(""+userInput.toCharArray()[userInput.length()-1]))
+				return false;				
+		}			
+		return true; 
+	}	
 	
 	private boolean noConsecutiveOp(){
 		
@@ -597,6 +651,8 @@ public class CrazyCalculator extends JFrame implements Runnable{
 								
 		ArrayList<Integer> indicesOfMatch = new ArrayList<Integer>();		
 		
+		System.out.println("token.size: " + token.length);
+		
 		for(int i = token.length; i >= 0; i--){
 			for(int j = 0; j < token.length; j++){
 				if(token[j].equals(")")){
@@ -610,6 +666,47 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			return true;
 		
 		return false;
+	}
+	
+	private boolean hasOpBeforeParenthesis(){
+		
+		boolean left = true, right = true;
+		
+		for(int i = 0 ; i < token.length; i++)
+		{		
+			if(token[i].equals("("))
+			{
+				if(i > 0)
+				{									
+					if(isOperator(token[i-1]))
+						left = true;
+					else 
+						left = false;
+							
+				}else
+					left = true;
+				
+			}
+			
+			if(token[i].equals(")"))
+			{
+				if(i < token.length-1)
+				{					
+					if(isOperator(token[i+1]))
+						right = true;
+					else 
+						right = false;
+																										
+				}else
+					right = true;					
+				
+			}			
+		}
+		
+		if(left && right)
+			return true;			
+		return false;
+		
 	}
 	
 	private boolean isLessThan(String op1, String op2){
@@ -680,29 +777,17 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	
 	private void pushDel(){
 		
-		if(userInput.length() == 1){
+		if(userInput.length() == 0)
 			userInput = "";
-		}				
-		
-		if(userInput.length() > 1){
-			if(userInput.substring(userInput.length()-2).equals("( ") || userInput.substring(userInput.length() - 2).equals(" )")){
-				userInput = userInput.substring(0, userInput.length() - 2);						
-			}
-			else if(userInput.toCharArray()[userInput.length()-1] == ' '){						
-					userInput = userInput.substring(0,userInput.length()-3);
-			}else{
-				userInput = userInput.substring(0, userInput.length()-1);
-			
-			}
-		}								
+		else if(userInput.length() > 0)			
+			userInput = userInput.substring(0, userInput.length()-1);			
 					
 		io.setText(userInput);
 	}
 	
 	private void pushEquals(){
+		userInput = io.getText();
 		io.setText(userInput);
-		//output.setText("");
-		//output.setForeground(Color.BLACK);
 		
 		int i = postfix.size()-1;				
 		while(i >= 0){					
@@ -733,16 +818,31 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	}
 	
 		public static void main(String args[]){
-		CrazyCalculator frame = new CrazyCalculator();
-		
-		frame.setSize(1250,420);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		//frame.setResizable(false);
+		CrazyCalculator frame = new CrazyCalculator();			
+		JFrame frame2 = new JFrame("Crazy Calculator");
 		
 		Dimension DimMax = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setMaximumSize(DimMax);
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//frame2.setMaximumSize(DimMax);
+		//frame2.setExtendedState(JFrame.MAXIMIZED_BOTH);				
+		
+		frame2.setLayout(null);			
+		frame2.getContentPane().setBackground(Color.DARK_GRAY);
+		frame2.add(title1);
+		frame2.add(title2);
+		frame2.add(postfixLabel);
+		frame2.add(pScroll);
+		frame2.add(sShots);		
+		frame2.add(sShots1);
+		
+				
+		frame2.setBounds(20, 50, 850, 750);
+		frame2.setVisible(true);
+		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setBounds(900, 100, 440, 480);
+		frame.setVisible(true);
+		frame.setResizable(false);
+
 	}
 }

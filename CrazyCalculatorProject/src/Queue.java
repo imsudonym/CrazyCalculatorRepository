@@ -10,7 +10,7 @@ public class Queue{
 	public void enqueue(String input){
 				
 		//displayQueue(input);
-		CrazyCalculator.makeThreadSleep();		
+		//CrazyCalculator.makeThreadSleep();		
 		array.add(input);
 	}
 	
