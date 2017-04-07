@@ -1,30 +1,44 @@
 public class Queue{
-	PseudoArray array = new PseudoArray(100);	
-	public static int dispInt = 0;
-	public static int temp = 0; 		
+	
+	public static String stringTemp;	
+	PseudoArray array = new PseudoArray(100);
+	
+	public Queue(){
+		stringTemp = "";
+	}
 	
 	public boolean isEmpty(){
 		return array.isEmpty();
 	}
 	
 	public void enqueue(String input){
-				
-		//displayQueue(input);
-		//CrazyCalculator.makeThreadSleep();		
+					
 		array.add(input);
+		
+		displayQueue(input);		
+		CrazyCalculator.makeThreadSleep();
 	}
 	
 	public String dequeue(){
-		/*
-		if(temp < 20)
-			CrazyCalculator.sShots.queueBlocks[temp++].setText("");
-		*/
-		if(temp == dispInt){
-			temp = 0; dispInt = 0;			
-		}			
+					
+		String str = array.remove();
 		
+		if(!CrazyCalculator.evaluatingPostfix){
+			if(stringTemp.length() > 0){
+				stringTemp = stringTemp.substring(1, stringTemp.length());
+			}
+			
+			CrazyCalculator.sShots1.queueBlocks.setText(stringTemp);
+		}else{
+			if(stringTemp.length() > 0){
+				stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));			
+				CrazyCalculator.sShots2.queueBlocks.setText(stringTemp);
+			}			
+		}	
+				
 		CrazyCalculator.makeThreadSleep();			
-		return array.remove();
+		
+		return str;
 	}
 	
 	public String peek(){
@@ -36,19 +50,16 @@ public class Queue{
 	}
 	
 	private void displayQueue(String input){
-		/*
-		if(input.equals("+"))
-			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("+");
-		if(input.equals("-"))
-			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("-");
-		if(input.equals("*"))
-			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("x");
-		if(input.equals("/"))
-			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("/");
-		if(input.equals("("))
-			CrazyCalculator.sShots.queueBlocks[dispInt++].setText("(");
-		if(input.equals(")"))
-			CrazyCalculator.sShots.queueBlocks[dispInt++].setText(")");*/		
+		
+		if(CrazyCalculator.evaluatingPostfix){			
+			stringTemp += input;
+			CrazyCalculator.sShots2.queueBlocks.setText(stringTemp);
+		}else{
+
+			stringTemp += input;
+			CrazyCalculator.sShots1.queueBlocks.setText(stringTemp);
+
+		}	
 	}
 	
 }

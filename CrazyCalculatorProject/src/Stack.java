@@ -1,18 +1,20 @@
 
 public class Stack {
 
-	private static String stringTemp = "";
-	private Queue queue = new Queue();
-	public static int s = 0;
-	public static int var = 0;
+	public static String stringTemp;	
+	Queue queue = new Queue();
 
+	public Stack(){
+		stringTemp = "";
+	}
+	
 	public boolean isEmpty(){
 		return queue.isEmpty();
 	}
 	
 	public void push(String input){
 				
-		displayStack(input);
+		//displayStack(input);
 		queue.enqueue(input);
 	}
 	
@@ -29,39 +31,24 @@ public class Stack {
 		for(int j = 0; j < temp.getSize(); j++){
 			queue.enqueue(temp.dequeue());
 		}
-		
-		/*
-		if(s > 0)
-			CrazyCalculator.sShots.stackBlocks[--s].setText("");
-		*/
+							
+		if(!CrazyCalculator.evaluatingPostfix){
+			if(stringTemp.length() > 0){
+				stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));
+				CrazyCalculator.sShots1.stackBlocks.setText(stringTemp);	
+			}					
+		}else{
+			if(stringTemp.length() > 0){
+				stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));						
+				CrazyCalculator.sShots2.stackBlocks.setText(stringTemp);
+			}			
+		}
+
 		return str;
 				
 	}
 	
 	public String peek(){
 		return queue.peek();
-	}
-		
-	private void displayStack(String input){
-		
-		
-		if(input.equals("+"))
-			stringTemp += "+";
-		else if(input.equals("-"))
-			stringTemp += "-";			
-		else if(input.equals("*"))
-			stringTemp += "x";
-		else if(input.equals("/"))
-			stringTemp += "/";
-		else if(input.equals("("))
-			stringTemp += "(";
-		else if(input.equals(")"))
-			stringTemp += ")";
-		else
-			stringTemp += input;
-		
-		CrazySnapshots.stackBlocks.setText(stringTemp);
-		
-	}
-	
+	}	
 }

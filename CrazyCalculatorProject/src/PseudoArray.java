@@ -1,11 +1,10 @@
 
 public class PseudoArray {
 	
-	public static int dispInt = 0;
-	public static int temp = 0;
+	public static String stringTemp = "";
 	private int size;	
 	public static int ctr = 0;
-	private LinkedList list = new LinkedList();	
+	LinkedList list = new LinkedList();	
 	
 	public PseudoArray(int size){
 		this.size = size;
@@ -22,7 +21,8 @@ public class PseudoArray {
 			list.add(newLink);
 			ctr++;
 			
-			//display(value);
+			display(value);
+			CrazyCalculator.makeThreadSleep();
 			
 		}else{
 			throw new java.lang.RuntimeException("ArrayIndexOutOfBounds.");
@@ -35,18 +35,26 @@ public class PseudoArray {
 	}
 	
 	public String remove(){
-		ctr--;		
 		
-		String data = list.remove(); 
+		String str = list.remove(); 	
 		
-		/*if(temp < 20)
-			CrazyCalculator.sShots.arrayBlocks[temp++].setText("");*/
+		if(!CrazyCalculator.evaluatingPostfix){
+			if(stringTemp.length() > 0){
+				stringTemp = stringTemp.substring(1, stringTemp.length());
+			}
+			
+			CrazyCalculator.sShots1.arrayBlocks.setText(stringTemp);
+		}else{
+			if(stringTemp.length() > 0){
+				stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));			
+				CrazyCalculator.sShots2.arrayBlocks.setText(stringTemp);
+			}			
+		}	
 		
-		if(temp == dispInt){
-			temp = 0;  dispInt = 0;			
-		}
-		
-		return data;
+		CrazyCalculator.makeThreadSleep();		
+								
+		ctr--;
+		return str;
 		
 	}
 	
@@ -55,18 +63,14 @@ public class PseudoArray {
 	}	
 	
 	private void display(String input){
-		/*
-		if(input.equals("+"))
-			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("+");
-		if(input.equals("-"))
-			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("-");
-		if(input.equals("*"))
-			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("x");
-		if(input.equals("/"))
-			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("/");
-		if(input.equals("("))
-			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText("(");
-		if(input.equals(")"))
-			CrazyCalculator.sShots.arrayBlocks[dispInt++].setText(")");*/		
+		
+		if(CrazyCalculator.evaluatingPostfix){			
+			stringTemp += input;
+			CrazyCalculator.sShots2.arrayBlocks.setText(stringTemp);
+		}else{
+			stringTemp += input;
+			CrazyCalculator.sShots1.arrayBlocks.setText(stringTemp);
+
+		}			
 	}
 }

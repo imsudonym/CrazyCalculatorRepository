@@ -9,7 +9,7 @@ public class CrazySnapshots extends JPanel{
 		
 	private String s;		
 	
-	public static JTextArea queueBlocks, 
+	public JTextArea queueBlocks, 
 					  stackBlocks,
 					  arrayBlocks,
 					  linkListBlocks;					  
@@ -19,7 +19,14 @@ public class CrazySnapshots extends JPanel{
 	private JLabel queueLabel = new JLabel("  Queue:", SwingConstants.CENTER);
 	private JLabel stackLabel = new JLabel("  Stack:", SwingConstants.CENTER);	
 	private JLabel arrayLabel = new JLabel("  Pseudo Array:", SwingConstants.CENTER);
-	private JLabel linkListLabel = new JLabel("  Linked List:", SwingConstants.CENTER);
+	private JLabel linkListLabel = new JLabel("  Linked List:", SwingConstants.CENTER);	
+	public JLabel readLabl = new JLabel("Character: ");	
+	public JLabel parsedLabl = new JLabel("Parsed: ");
+	
+	public JLabel read = new JLabel();
+	public JTextArea parsed = new JTextArea();
+	private JScrollPane pScroll = new JScrollPane(parsed);
+	
 	
 	private JPanel[] panels = new JPanel[4];
 	private JPanel panel = new JPanel();	
@@ -30,7 +37,21 @@ public class CrazySnapshots extends JPanel{
 		
 		panel.setLayout(new GridLayout(4, 1 , 10 , 10));
 		
-		// panels for queue, stacks, postfix, and final answer
+		readLabl.setFont(new Font("Consolas", Font.BOLD, 16));
+		readLabl.setBounds(45, 45, 100, 20);
+		
+		parsedLabl.setFont(new Font("Consolas", Font.BOLD, 16));
+		parsedLabl.setBounds(45, 70, 100, 20);
+		
+		read.setFont(new Font("Consolas", Font.BOLD, 16));
+		read.setBounds(155, 45, 100, 20);		
+		
+		parsed.setFont(new Font("Consolas", Font.BOLD, 16));
+		pScroll.setBorder(null);
+		pScroll.setBounds(155, 70, 300, 20);
+		pScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		pScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		
 		for(int i = 0; i < 4; i ++){
 			panels[i] = new JPanel();
 			panels[i].setLayout(null);			
@@ -75,18 +96,22 @@ public class CrazySnapshots extends JPanel{
 		panels[3].add(lScroll);
 		
 		// labels for queue, stack, postfix, final answer			
-		queueLabel.setFont(new Font("Consolas", Font.BOLD, 20));		
-		stackLabel.setFont(new Font("Consolas", Font.BOLD, 20));		
-		arrayLabel.setFont(new Font("Consolas", Font.BOLD, 20));
-		linkListLabel.setFont(new Font("Consolas", Font.BOLD, 20));				
+		queueLabel.setFont(new Font("Consolas", Font.BOLD, 16));		
+		stackLabel.setFont(new Font("Consolas", Font.BOLD, 16));		
+		arrayLabel.setFont(new Font("Consolas", Font.BOLD, 16));
+		linkListLabel.setFont(new Font("Consolas", Font.BOLD, 16));				
 		
-		stackLabel.setBounds(10, 50, 110, 40);
-		queueLabel.setBounds(10, 95, 110, 40);		
-		arrayLabel.setBounds(5, 145, 180, 40);
-		linkListLabel.setBounds(5, 190, 180, 40);				
+		stackLabel.setBounds(10, 92, 110, 40);
+		queueLabel.setBounds(10, 125, 110, 40);		
+		arrayLabel.setBounds(5, 162, 180, 40);
+		linkListLabel.setBounds(5, 195, 180, 40);				
 		
-		panel.setBounds(151, 50, 600, 180);
+		panel.setBounds(151, 95, 600, 140);
 		
+		add(readLabl);
+		add(parsedLabl);
+		add(read);		
+		add(pScroll);
 		add(queueLabel);
 		add(stackLabel);
 		add(arrayLabel);
