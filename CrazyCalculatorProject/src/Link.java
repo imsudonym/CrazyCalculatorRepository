@@ -1,5 +1,5 @@
-
 public class Link {
+	
 	private String value;
 	public Link next;
 	public Link previous;

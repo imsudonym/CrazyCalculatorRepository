@@ -53,13 +53,12 @@ public class LinkedList{
 			
 			first = first.next;					
 			
-			str = temp.getValue();
-			
+			str = temp.getValue();			
 		}						
 		
 		if(str != null){
 			if(!CrazyCalculator.evaluatingPostfix){
-				if(stringTemp.length() > 0){
+				if(stringTemp.length() > 0){  
 					stringTemp = stringTemp.substring(1, stringTemp.length());
 				}
 				
