@@ -12,9 +12,7 @@ public class Stack {
 		return queue.isEmpty();
 	}
 	
-	public void push(String input){
-				
-		//displayStack(input);
+	public void push(String input){				
 		queue.enqueue(input);
 	}
 	

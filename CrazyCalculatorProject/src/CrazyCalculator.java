@@ -21,8 +21,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	public static boolean evaluatingPostfix = false;
 	private static boolean toggleOperation = false;
 	private static int sleepTime = 100;
-	
-	private static String string = "  Postfix:  ";	
+		
 	public static String userInput = "";
 	public static String[] token; 
 	private static String character = "", parsed = "", commitStr = "", stackContents = "";

@@ -8,11 +8,6 @@ public class LinkedList{
 		return (first == null);
 	}
 	
-	/*
-	public static void setStringTemp(String str){
-		stringTemp = str;				
-	}*/
-	
 	public void add(Link newLink){
 		
 		if(isEmpty()){

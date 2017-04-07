@@ -7,8 +7,6 @@ import java.awt.GridLayout;
 
 public class CrazySnapshots extends JPanel{
 		
-	private String s;		
-	
 	public JTextArea queueBlocks, 
 					  stackBlocks,
 					  arrayBlocks,
@@ -94,8 +92,7 @@ public class CrazySnapshots extends JPanel{
 		panels[1].add(qScroll);			
 		panels[2].add(aScroll);
 		panels[3].add(lScroll);
-		
-		// labels for queue, stack, postfix, final answer			
+			
 		queueLabel.setFont(new Font("Consolas", Font.BOLD, 16));		
 		stackLabel.setFont(new Font("Consolas", Font.BOLD, 16));		
 		arrayLabel.setFont(new Font("Consolas", Font.BOLD, 16));
