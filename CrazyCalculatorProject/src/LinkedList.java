@@ -1,16 +1,17 @@
 public class LinkedList{
 	
-	public static String stringTemp;
+	public static String stringTemp = "";
 	public Link last = null;
 	public Link first = null;		
-	
-	public LinkedList(){
-		stringTemp = "";
-	}
 	
 	public boolean isEmpty(){
 		return (first == null);
 	}
+	
+	/*
+	public static void setStringTemp(String str){
+		stringTemp = str;				
+	}*/
 	
 	public void add(Link newLink){
 		
@@ -69,10 +70,14 @@ public class LinkedList{
 				
 				CrazyCalculator.sShots1.linkListBlocks.setText(stringTemp);
 			}else{
+				
 				if(stringTemp.length() > 0){
-					stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));			
-					CrazyCalculator.sShots2.linkListBlocks.setText(stringTemp);
-				}			
+					if(stringTemp.indexOf(str) > 0)
+						stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));
+					else
+						stringTemp = "";
+				}
+				CrazyCalculator.sShots2.linkListBlocks.setText(stringTemp);	
 			}
 				
 			CrazyCalculator.makeThreadSleep();

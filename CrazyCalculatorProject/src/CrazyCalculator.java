@@ -64,15 +64,9 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		setLayout(null);
 		this.getContentPane().setBackground(Color.DARK_GRAY);
 				
-		init();			
-		
+		init();					
 		add(calcPanel);
-		/*add(pScroll);
-		/*
-		add(sShots);
-		add(postfixLabel);
-		
-		add(sShots1);*/
+
 	}
 	
 	private void init(){
@@ -239,14 +233,14 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			Object source = e.getSource();
 			userInput = io.getText();
 			
-			if(source == numPad[11])		//	'del' button click
+			if(source == numPad[11])		
 				pushDel();				
-			else if(source == opPad[6])		//	'AC' button	click	
+			else if(source == opPad[6])		
 				pushAC();							
-			else if(source == opPad[7]){	//	'=' button click						
+			else if(source == opPad[7]){						
 				pushEquals();				
 				start();
-												
+										
 			}			
 			else{				
 				// numbers 1-9
@@ -355,7 +349,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			
 			System.out.println("--------------------------------------------------------------------------");
 			System.out.println("\nConverting Infix to Postfix...");
-			System.out.println("Read\t\t\tParsed\t\t\tPostfix\t\t\tStack");
+			System.out.printf("%-20s\t\t%-20s\t\t%-20s\t\t%-20s\n", "Character", "Parsed", "Postfix", "Stack");
 
 			for(int i = 0; i < token.length; i++)
 			{		
@@ -474,7 +468,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 						makeThreadSleep();
 					}
 
-					System.out.printf("%-15s\t%-15s\t\t%-15s\t\t%-15s\n", character, parsed, commitStr, stackContents);					
+					System.out.printf("%-20s\t\t%-20s\t\t%-20s\t\t%-20s\n", character, parsed, commitStr, stackContents);					
 						
 			}	// end parse
 							
@@ -494,14 +488,14 @@ public class CrazyCalculator extends JFrame implements Runnable{
 				sShots1.stackBlocks.setText(stackContents);
 				postfixEvaBlocks.setText(commitStr);
 				
-				System.out.printf("%-15s\t%-15s\t\t%-15s\t\t%-15s\n", character, parsed, commitStr, stackContents);		
+				System.out.printf("%-20s\t\t%-20s\t\t%-20s\t\t%-20s\n", character, parsed, commitStr, stackContents);		
 				
 				makeThreadSleep();
 			}										
 							
 			System.out.println("Postfix: " + commitStr + "\n");
 			System.out.println("Evaluating postfix...\n");
-			System.out.println("Character\tParsed\t\t\tEvaluate\t\tStack");
+			System.out.printf("%-20s\t\t%-20s\t\t%-20s\t\t%-20s\n", "Character", "Parsed", "Evaluate", "Stack");
 			character = "";
 			parsed = "";
 			commitStr = "";
@@ -593,7 +587,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 					sShots2.stackBlocks.setText(stackContents);
 				}
 
-				System.out.printf("%-15s\t%-15s\t\t%-15s\t\t%-15s\n", character, parsed, commitStr, stackContents);						
+				System.out.printf("%-20s\t\t%-20s\t\t%-20s\t\t%-20s\n", character, parsed, commitStr, stackContents);						
 
 				if(ctr == postfix.size()){
 					character = "End";
@@ -607,7 +601,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 				
 			}		
 			
-			System.out.printf("%-15s\t%-15s\t\t%-15s\t\t%-15s\n", character, parsed, commitStr, stackContents);
+			System.out.printf("%-20s\t\t%-20s\t\t%-20s\t\t%-20s\n", character, parsed, commitStr, stackContents);
 			
 			answer = postfixStack.pop();
 
@@ -615,7 +609,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			sShots2.stackBlocks.setText(stackContents);
 			commitStr = "";
 			
-			System.out.printf("%-15s\t%-15s\t\t%-15s\t\t%-15s\n", character, parsed, commitStr, stackContents);	
+			System.out.printf("%-20s\t\t%-20s\t\t%-20s\t\t%-20s\n", character, parsed, commitStr, stackContents);	
 			System.out.println("Answer: " + answer);	
 			
 			if(answer.equals("Infinity") || answer.equals("NaN")){
@@ -801,17 +795,10 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		
 		sShots1.read.setText("");
 		sShots1.parsed.setText("");
-		sShots1.stackBlocks.setText("");
-		sShots1.queueBlocks.setText("");
-		sShots1.arrayBlocks.setText("");
-		sShots1.linkListBlocks.setText("");
+		postfixEvaBlocks.setText("");		
 		
 		sShots2.read.setText("");
-		sShots2.parsed.setText("");
-		sShots2.stackBlocks.setText("");
-		sShots2.queueBlocks.setText("");
-		sShots2.arrayBlocks.setText("");
-		sShots2.linkListBlocks.setText("");		
+		sShots2.parsed.setText("");		
 		
 		Stack.stringTemp = "";
 		Queue.stringTemp = "";
@@ -846,17 +833,10 @@ public class CrazyCalculator extends JFrame implements Runnable{
 		
 		sShots1.read.setText("");
 		sShots1.parsed.setText("");
-		sShots1.stackBlocks.setText("");
-		sShots1.queueBlocks.setText("");
-		sShots1.arrayBlocks.setText("");
-		sShots1.linkListBlocks.setText("");
+		postfixEvaBlocks.setText("");		
 		
 		sShots2.read.setText("");
-		sShots2.parsed.setText("");
-		sShots2.stackBlocks.setText("");
-		sShots2.queueBlocks.setText("");
-		sShots2.arrayBlocks.setText("");
-		sShots2.linkListBlocks.setText("");			
+		sShots2.parsed.setText("");			
 		
 		Stack.stringTemp = "";
 		Queue.stringTemp = "";

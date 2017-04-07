@@ -1,11 +1,7 @@
 public class Queue{
 	
-	public static String stringTemp;	
-	PseudoArray array = new PseudoArray(100);
-	
-	public Queue(){
-		stringTemp = "";
-	}
+	public static String stringTemp = "";	
+	PseudoArray array = new PseudoArray(100);	
 	
 	public boolean isEmpty(){
 		return array.isEmpty();
@@ -30,10 +26,14 @@ public class Queue{
 			
 			CrazyCalculator.sShots1.queueBlocks.setText(stringTemp);
 		}else{
-			if(stringTemp.length() > 0){
-				stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));			
-				CrazyCalculator.sShots2.queueBlocks.setText(stringTemp);
-			}			
+			if(stringTemp.length() > 1){
+				if(stringTemp.indexOf(str) > 0)
+					stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));
+				else
+					stringTemp = "";
+			}
+			CrazyCalculator.sShots2.queueBlocks.setText(stringTemp);
+						
 		}	
 				
 		CrazyCalculator.makeThreadSleep();			

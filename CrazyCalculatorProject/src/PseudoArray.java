@@ -45,10 +45,14 @@ public class PseudoArray {
 			
 			CrazyCalculator.sShots1.arrayBlocks.setText(stringTemp);
 		}else{
+			
 			if(stringTemp.length() > 0){
-				stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));			
-				CrazyCalculator.sShots2.arrayBlocks.setText(stringTemp);
-			}			
+				if(stringTemp.indexOf(str) > 0)
+					stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));
+				else
+					stringTemp = "";
+			}
+			CrazyCalculator.sShots2.arrayBlocks.setText(stringTemp);
 		}	
 		
 		CrazyCalculator.makeThreadSleep();		

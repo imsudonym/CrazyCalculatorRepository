@@ -38,10 +38,15 @@ public class Stack {
 				CrazyCalculator.sShots1.stackBlocks.setText(stringTemp);	
 			}					
 		}else{
+			
 			if(stringTemp.length() > 0){
-				stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));						
-				CrazyCalculator.sShots2.stackBlocks.setText(stringTemp);
-			}			
+				if(stringTemp.indexOf(str) > 0)
+					stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));
+				else
+					stringTemp = "";
+			}
+			CrazyCalculator.sShots2.stackBlocks.setText(stringTemp);
+						
 		}
 
 		return str;

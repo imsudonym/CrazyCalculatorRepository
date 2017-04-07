@@ -48,7 +48,7 @@ public class CrazySnapshots extends JPanel{
 		
 		parsed.setFont(new Font("Consolas", Font.BOLD, 16));
 		pScroll.setBorder(null);
-		pScroll.setBounds(155, 70, 300, 20);
+		pScroll.setBounds(155, 70, 500, 20);
 		pScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		pScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
