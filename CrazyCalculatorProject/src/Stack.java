@@ -13,18 +13,12 @@ public class Stack {
 	}
 	
 	public String pop(){
-		Queue temp = new Queue();
-		String str = "";
-		
+
 		for(int i = 0; i < queue.getSize()-1; i++){
-			temp.enqueue(queue.dequeue());
+			queue.enqueue(queue.dequeue());
 		}
 		
-		str = queue.dequeue();
-		
-		for(int j = 0; j < temp.getSize(); j++){
-			queue.enqueue(temp.dequeue());
-		}
+		String str = queue.dequeue();		
 							
 		if(!CrazyCalculator.evaluatingPostfix){
 			
