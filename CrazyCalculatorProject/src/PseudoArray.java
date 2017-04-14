@@ -1,7 +1,7 @@
 
 public class PseudoArray {
 	
-	public static String stringTemp = "";
+	public static String stringTemp = "";	
 	private int size;	
 	public static int ctr = 0;
 	LinkedList list = new LinkedList();	
@@ -39,19 +39,15 @@ public class PseudoArray {
 		String str = list.remove(); 	
 		
 		if(!CrazyCalculator.evaluatingPostfix){
-			if(stringTemp.length() > 0){
+			if(stringTemp.length() > 0)
 				stringTemp = stringTemp.substring(1, stringTemp.length());
-			}
 			
 			CrazyCalculator.sShots1.arrayBlocks.setText(stringTemp);
 		}else{
 			
-			if(stringTemp.length() > 0){
-				if(stringTemp.indexOf(str) > 0)
-					stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));
-				else
-					stringTemp = "";
-			}
+			if(stringTemp.length() > 0)
+				stringTemp = stringTemp.substring(str.length(), stringTemp.length());
+			
 			CrazyCalculator.sShots2.arrayBlocks.setText(stringTemp);
 		}	
 		

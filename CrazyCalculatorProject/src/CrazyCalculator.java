@@ -20,7 +20,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 	
 	public static boolean evaluatingPostfix = false;
 	private static boolean toggleOperation = false;
-	private static int sleepTime = 700;
+	private static int sleepTime = 300;
 		
 	public static String userInput = "";
 	public static String[] token; 
@@ -324,7 +324,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			
 			if(isOperator("" + userInput.toCharArray()[i])){				
 
-				if(isOperator("" + userInput.toCharArray()[i-1]) || userInput.toCharArray()[i-1] == '(' || userInput.toCharArray()[i-1] == ')')
+				if((userInput.length() > 1) && (isOperator("" + userInput.toCharArray()[i-1]) || userInput.toCharArray()[i-1] == '(' || userInput.toCharArray()[i-1] == ')'))
 					read += userInput.toCharArray()[i] + " ";	
 				else 
 					read += " " + userInput.toCharArray()[i] + " ";
@@ -648,7 +648,7 @@ public class CrazyCalculator extends JFrame implements Runnable{
 			if(token[k].equals("(")){	
 				indices.add(k);
 			}
-		}
+		}		
 		
 		if(parenthesisHasMatch(indices) && noConsecutiveOp() && operandsComplete() && noDoubleDecimal() && hasOpBeforeParenthesis())
 			return true;

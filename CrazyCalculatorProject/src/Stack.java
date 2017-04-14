@@ -1,12 +1,8 @@
 
 public class Stack {
 
-	public static String stringTemp;	
+	public static String stringTemp = "";	
 	Queue queue = new Queue();
-
-	public Stack(){
-		stringTemp = "";
-	}
 	
 	public boolean isEmpty(){
 		return queue.isEmpty();
@@ -31,18 +27,17 @@ public class Stack {
 		}
 							
 		if(!CrazyCalculator.evaluatingPostfix){
-			if(stringTemp.length() > 0){
-				stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));
-				CrazyCalculator.sShots1.stackBlocks.setText(stringTemp);	
-			}					
+			
+			if(stringTemp.length() > 0)
+				stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));				
+			
+			CrazyCalculator.sShots1.stackBlocks.setText(stringTemp);
+			
 		}else{
 			
-			if(stringTemp.length() > 0){
-				if(stringTemp.indexOf(str) > 0)
-					stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));
-				else
-					stringTemp = "";
-			}
+			if(stringTemp.length() > 0)				
+				stringTemp = stringTemp.substring(0, stringTemp.indexOf(str.toCharArray()[0])+1);
+			
 			CrazyCalculator.sShots2.stackBlocks.setText(stringTemp);
 						
 		}

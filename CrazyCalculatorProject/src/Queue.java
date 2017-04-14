@@ -18,22 +18,19 @@ public class Queue{
 	public String dequeue(){
 					
 		String str = array.remove();
-		
+						
 		if(!CrazyCalculator.evaluatingPostfix){
-			if(stringTemp.length() > 0){
-				stringTemp = stringTemp.substring(1, stringTemp.length());
-			}
+			
+			if(stringTemp.length() > 0)
+				stringTemp = stringTemp.substring(1, stringTemp.length());			
 			
 			CrazyCalculator.sShots1.queueBlocks.setText(stringTemp);
 		}else{
-			if(stringTemp.length() > 1){
-				if(stringTemp.indexOf(str) > 0)
-					stringTemp = stringTemp.substring(0, stringTemp.indexOf(str));
-				else
-					stringTemp = "";
-			}
-			CrazyCalculator.sShots2.queueBlocks.setText(stringTemp);
-						
+			
+			if(stringTemp.length() > 0)					
+				stringTemp = stringTemp.substring(str.length(), stringTemp.length());
+			
+			CrazyCalculator.sShots2.queueBlocks.setText(stringTemp);						
 		}	
 				
 		CrazyCalculator.makeThreadSleep();			
